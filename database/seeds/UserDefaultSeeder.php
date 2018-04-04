@@ -21,9 +21,9 @@ class UserDefaultSeeder extends Seeder
         ]);
 
         $user = User::create([
-            'first_name'    => 'Ahmad',
-            'last_name'     => 'Bilal',
-            'email'         => 'ahmad@studio98.com',
+            'first_name'    => 'Rafferty',
+            'last_name'     => 'Pendary',
+            'email'         => 'rafferty@studio98.com',
             'password'      => bcrypt('admin1234'),
             'phone'         => '123456',
             'gender'        => 'Male',
