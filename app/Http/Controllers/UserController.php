@@ -76,9 +76,9 @@ class UserController extends Controller
             $user->user_name    = $user_name;
             $user->created_by   = $this->user->id;
             $user->save();
-            $company_id = $request->input('company_id');
-            $company = Company::findOrFail($company_id);
-            $company->assignContact($user, []);
+            /*$company_id = $request->input('company_id');
+            $company = Company::findOrFail($company_id);*/
+            $this->company->assignContact($user, []);
         } else {
             $user = $checkUser;
         }

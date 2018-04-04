@@ -30,7 +30,7 @@
                 </li>
             @endif
             @if(Auth::user()->isCustomer())
-                <li class="{{ (Request::is('purchase-unit*')) ? ' active' : '' }}">
+                <li class="{{ (Request::is('my-account')) ? ' active' : '' }}">
                     <a href="{{ url('my-account') }}">
                         <i class="fa fa-user"></i> My Account
                     </a>

@@ -33,12 +33,12 @@
         {!! Form::label('user_name','User Login name') !!}
         {!! Form::text('user_name' , $user->user_name, ['class' => 'form-control', 'placeholder' => 'Unique User Login name']) !!}
     </div>
-    @if(!isset($is_my_account))
+    {{--@if(!isset($is_my_account))
         <div class="form-group">
             {!! Form::label('company_id','Company') !!}
             {!! Form::select('company_id', $company_list, ($user->id > 0) ? \App\Company::userCurrentCompany($user->id) : null , ['id' => 'company_id','class' => 'form-control']) !!}
         </div>
-    @endif
+    @endif--}}
     @if(!isset($is_my_account))
         <?php
         $role_id = null;

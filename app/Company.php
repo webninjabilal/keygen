@@ -63,4 +63,54 @@ class Company extends Model
 
         return $currentCompany->company_id;
     }
+
+    public static function childCompanies($company_id)
+    {
+        $list = [];
+        $companyParent = self::findOrNew($company_id);
+        $list[$companyParent->id] = $companyParent->name;
+        $companies = self::where('parent_id',$company_id)->where('status',1)->get();
+        if($companies) {
+            foreach($companies as $company) {
+                $list[$company->id] = $company->name;
+                $child_companies = self::childCompanies($company->id);
+                if(count($child_companies) > 0)
+                    $list = $list + $child_companies;
+            }
+        }
+        return $list;
+    }
+
+    /**
+     * @param $user_id
+     * @return array
+     */
+    public static function allUserCompanies($user_id)
+    {
+        $list = [];
+        $companies = CompanyUser::where('user_id',$user_id)->orderby('company_id','ASC')->get();
+        if($companies) {
+            foreach($companies as $company) {
+                $company = self::findOrFail($company->company_id);
+                $list[$company->id] = $company->name;
+            }
+        }
+        return $list;
+    }
+
+    public static function userLevelCompanies($user_id)
+    {
+        $user = User::findOrFail($user_id);
+        $company_id = self::userCurrentCompany($user_id);
+        if($user->isAdmin()) {
+            $companies = self::allUserCompanies($user_id);
+
+            /*$companies = self::childCompanies($company_id);
+            $companies = $companies + self::allUserCompanies($user_id);*/
+        } else {
+            $companies = self::allUserCompanies($user_id);
+        }
+        return $companies;
+        return array_unique($companies);
+    }
 }

@@ -5,6 +5,7 @@
         </div>
     </div>
     <ul class="nav navbar-top-links navbar-right">
+        <li>{!! $companies_dropdown !!}</li>
         <li>
             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                 <i class="fa fa-user-secret"></i> {{ Auth::user()->full_name }} <span class="caret"></span>

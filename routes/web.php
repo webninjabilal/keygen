@@ -44,16 +44,19 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('user/delete-machine', 'UserController@postDeleteMachine')->name('user_machine_delete');
     Route::resource('user', 'UserController');
 
-    Route::get('sheet/records', 'SheetController@records')->name('sheet_records');
-    Route::resource('sheet', 'SheetController');
 
-    Route::get('unit/records', 'UnitController@records')->name('unit_records');
-    Route::resource('unit', 'UnitController');
+    Route::group(['middleware' => ['admin']], function () {
+        Route::get('sheet/records', 'SheetController@records')->name('sheet_records');
+        Route::resource('sheet', 'SheetController');
 
-    Route::get('machine/records', 'MachineController@records')->name('machine_records');
-    Route::resource('machine', 'MachineController');
+        Route::get('unit/records', 'UnitController@records')->name('unit_records');
+        Route::resource('unit', 'UnitController');
 
-    Route::get('user-role/records', 'RoleController@records')->name('user_role_records');
-    Route::resource('user-role', 'RoleController');
+        Route::get('machine/records', 'MachineController@records')->name('machine_records');
+        Route::resource('machine', 'MachineController');
+
+        Route::get('user-role/records', 'RoleController@records')->name('user_role_records');
+        Route::resource('user-role', 'RoleController');
+    });
 });
 
