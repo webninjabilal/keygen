@@ -1,0 +1,30 @@
+.passwordBox .ibox-content {
+    border-radius: 10px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+}
+.show_popup_image{
+    width: 100px;
+}
+.show_popup_image img{
+    width: 100%;
+}
+.inmodal .modal-header {
+    padding: 10px 10px;
+}
+.inmodal .modal-title {
+    float: left;
+}
+.red{
+    color: red;
+}
+.margin-20{
+    margin-left: 20px;
+}
+.dfTable tbody tr td:nth-child(2n){
+    font-weight: bolder;
+}
+.pointer_view{
+    cursor: pointer;
+}
