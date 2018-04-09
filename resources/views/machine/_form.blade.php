@@ -1,7 +1,7 @@
 
 <div class="form-group">
-    {!! Form::label('nick_name','Nick Name *') !!}
-    {!! Form::text('nick_name' , $machine->nick_name , ['class' => 'form-control','placeholder' => 'Nick Name','required'=>'true']) !!}
+    {!! Form::label('nick_name','Name *') !!}
+    {!! Form::text('nick_name' , $machine->nick_name , ['id' => 'nick_name', 'class' => 'form-control','placeholder' => 'Name','required'=>'true']) !!}
 </div>
 <div class="form-group">
     {!! Form::label('prefix','Prefix *') !!}

@@ -10,7 +10,7 @@
             @if(Auth::user()->isAdmin())
                 <li class="{{ (Request::is('user*')) ? ' active' : '' }}">
                     <a href="{{ route('user.index') }}"><i class="fa fa-user" aria-hidden="true"></i>
-                        <span class="nav-label"> Users </span>
+                        <span class="nav-label"> Customers </span>
                     </a>
                 </li>
                 <li class="{{ (Request::is('sheet*')) ? ' active' : '' }}">

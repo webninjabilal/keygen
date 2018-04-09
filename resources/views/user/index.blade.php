@@ -6,9 +6,9 @@
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="row">
             <div class="col-lg-12">
-                <h2> User
+                <h2> Customer
                     <div class="pull-right">
-                        <a class="btn btn-primary" href="javascript:void(0);" data-toggle="modal" data-target="#create_user"><i class="fa fa-plus"></i> Add User</a>
+                        <a class="btn btn-primary" href="javascript:void(0);" data-toggle="modal" data-target="#create_user"><i class="fa fa-plus"></i> Add Customer</a>
                     </div>
                 </h2>
             </div>
@@ -46,7 +46,7 @@
                 {!! Form::open(['onsubmit' => 'return saveUser();']) !!}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title">Add User</h4>
+                    <h4 class="modal-title">Add Customer</h4>
                 </div>
                 <div class="modal-body">
                     @include('user.form._form',compact('user'))
@@ -66,7 +66,7 @@
                 {!! Form::open(['method' => 'PUT' , 'onsubmit' => 'return updateUser();']) !!}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title">Update User</h4>
+                    <h4 class="modal-title">Update Customer</h4>
                 </div>
                 <div class="modal-body"></div>
                 <div class="modal-footer">

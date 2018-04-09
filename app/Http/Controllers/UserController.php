@@ -211,12 +211,21 @@ class UserController extends Controller
                     $user->first_name,
                     $user->last_name,
                     $user->email,
-                    User::getUserRoleName($user->id),
-                    '<span class="label label-primary">Active</span>',
-                    '<a href="javascript:void(0)" class="btn btn-white btn-sm" onclick="getUser(' . $user->id . ')"><i class="fa fa-pencil"></i> Edit</a>
-                     <a href="javascript:void(0)" class="btn btn-white btn-sm" onclick="deleteUser(' . $user->id . ')"><i class="fa fa-trash-o"></i> Delete</a>
-                    ',
                 ];
+                if($this->user->isAdmin()) {
+                    $data[3] = User::getUserRoleName($user->id);
+                    $data[4] = '<span class="label label-primary">Active</span>';
+                    $data[5] = '<a href="javascript:void(0)" class="btn btn-white btn-sm" onclick="getUser(' . $user->id . ')"><i class="fa fa-pencil"></i> Edit</a>
+                     <a href="javascript:void(0)" class="btn btn-white btn-sm" onclick="deleteUser(' . $user->id . ')"><i class="fa fa-trash-o"></i> Delete</a>
+                    ';
+                }
+                if($this->user->isCustomer()) {
+                    $data[3] = '<span class="label label-primary">Active</span>';
+                    $data[4] = '<a href="javascript:void(0)" class="btn btn-white btn-sm" onclick="getUser(' . $user->id . ')"><i class="fa fa-pencil"></i> Edit</a>
+                     <a href="javascript:void(0)" class="btn btn-white btn-sm" onclick="deleteUser(' . $user->id . ')"><i class="fa fa-trash-o"></i> Delete</a>
+                    ';
+                }
+
                 $records[] = $data;
             }
         }

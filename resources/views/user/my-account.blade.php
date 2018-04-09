@@ -34,7 +34,7 @@
                                         <a  data-toggle="tab" data-id="my-orders" href="#tab-orders">Orders</a>
                                     </li>
                                     <li>
-                                        <a  data-toggle="tab" data-id="my-customers" href="#tab-customers">Manage Customers</a>
+                                        <a  data-toggle="tab" data-id="my-users" href="#tab-users">Users</a>
                                     </li>
                                 </ul>
                                 <div class="tab-content">
@@ -60,7 +60,7 @@
                                             @include('user.orders')
                                         </div>
                                     </div>
-                                    <div id="tab-customers" class="tab-pane">
+                                    <div id="tab-users" class="tab-pane">
                                         <div class="panel-body">
                                             @include('flash::message')
                                             <div class="clearfix"></div>
@@ -74,7 +74,6 @@
                                                         <th>First Name</th>
                                                         <th>Last Name</th>
                                                         <th>Email Address</th>
-                                                        <th>Type</th>
                                                         <th>Status</th>
                                                         <th>Action</th>
                                                     </tr>
