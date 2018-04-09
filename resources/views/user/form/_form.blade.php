@@ -9,12 +9,6 @@
     </div>
 
     <div class="form-group">
-        {!! Form::label('gender','Gender *') !!}
-        {!! Form::select('gender' , \App\User::gender_list(), $user->gender , ['class' => 'form-control','required'=>'true']) !!}
-    </div>
-
-
-    <div class="form-group">
         {!! Form::label('phone','Phone  *') !!}
         {!! Form::text('phone' , $user->phone , ['class' => 'form-control','placeholder' => 'Phone ','required'=>'true']) !!}
     </div>

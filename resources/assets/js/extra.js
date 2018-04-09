@@ -8,6 +8,15 @@ $(document).ready(function () {
         pageLength: per_page_show,
     });
     initialize_datetimepicker('.datetimepicker');
+    $('select[name=company_main]').change(function() {
+        var company_id = $(this).val();
+        $.ajax({
+            method: 'GET',
+            url: base_url+'/company/change-company/'+company_id
+        }).done(function() {
+            location.reload();
+        });
+    });
 });
 
 

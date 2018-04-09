@@ -17,8 +17,7 @@ class CreateUserLoginTable extends Migration
         Schema::create($this->table, function(Blueprint $table)
         {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('user_id')->default(0);
             $table->string('ip', 50);
             $table->smallInteger('success')->default(0);
             $table->smallInteger('fail')->default(0);

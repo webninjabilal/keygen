@@ -5,9 +5,21 @@ namespace App\Http\Controllers;
 use App\Company;
 use App\Http\Requests\CompanyRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Session;
 
 class CompanyController extends Controller
 {
+    
+    protected $user = null;
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            return $next($request);
+        });
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,6 +28,18 @@ class CompanyController extends Controller
     public function index()
     {
         return view('company.index');
+    }
+
+    public function getChangeCompany($company_id)
+    {
+        $companies = Company::userLevelCompanies($this->user->id);
+        if(isset($companies[$company_id])) {
+            Session::put('company_main', $company_id);
+            Session::save();
+            return json_encode(['success' => true]);
+        }
+        return json_encode(['success' => false]);
+
     }
 
     /**

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('extrastyles')
-    <link href="{{ asset('/plugins/dataTables/datatables.min.css') }}" rel="stylesheet">
+
 @endsection
 <?php $is_my_account = true; ?>
 @section('content')
@@ -20,7 +20,7 @@
                         @include('flash::message')
                         @include('errors._form')
                         <div class="clearfix"></div>
-                        <div class="row" id="update_user">
+                        <div class="row" id="my_account">
                             <div class="col-sm-12">
                                 @if($user->isCustomer())
                                 <ul class="nav nav-tabs">
@@ -32,6 +32,9 @@
                                     </li>
                                     <li>
                                         <a  data-toggle="tab" data-id="my-orders" href="#tab-orders">Orders</a>
+                                    </li>
+                                    <li>
+                                        <a  data-toggle="tab" data-id="my-customers" href="#tab-customers">Manage Customers</a>
                                     </li>
                                 </ul>
                                 <div class="tab-content">
@@ -55,6 +58,28 @@
                                     <div id="tab-orders" class="tab-pane">
                                         <div class="panel-body">
                                             @include('user.orders')
+                                        </div>
+                                    </div>
+                                    <div id="tab-customers" class="tab-pane">
+                                        <div class="panel-body">
+                                            @include('flash::message')
+                                            <div class="clearfix"></div>
+                                                <div class="pull-right">
+                                                    <a class="btn btn-primary" href="javascript:void(0);" data-toggle="modal" data-target="#create_user"><i class="fa fa-plus"></i> Add User</a>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <table id="user_list" class="table table-striped table-bordered table-hover" style="width: 100%;" >
+                                                    <thead>
+                                                    <tr>
+                                                        <th>First Name</th>
+                                                        <th>Last Name</th>
+                                                        <th>Email Address</th>
+                                                        <th>Type</th>
+                                                        <th>Status</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                    </thead>
+                                                </table>
                                         </div>
                                     </div>
                                 </div>
@@ -92,12 +117,12 @@
         });
         function updateUser() {
 
-            var validate = customValidations('update_user');
+            var validate = customValidations('my_account');
             if(!validate){
                 return false;
             }
-            var user_id = $('#update_user').find('input[name=user_id]').val();
-            return reloadAjaxSubmit('update_user',"{{ url('user') }}/"+user_id,'name','Update');
+            var user_id = $('#my_account').find('input[name=user_id]').val();
+            return reloadAjaxSubmit('my_account',"{{ url('user') }}/"+user_id,'name','Update');
         }
 
         function customValidations(parent_id) {
@@ -127,4 +152,5 @@
         }
     </script>
     @include('user._script')
+    @include('user._basic_script')
 @endsection

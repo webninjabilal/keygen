@@ -19,10 +19,10 @@ class MachineController extends Controller
     {
         $this->middleware(function ($request, $next) {
             $this->user = Auth::user();
-
+            $this->company = Company::findOrFail(getSelectedCompany());
             return $next($request);
         });
-        $this->company = Company::findOrFail(getSelectedCompany());
+
     }
     /**
      * Display a listing of the resource.
@@ -31,7 +31,7 @@ class MachineController extends Controller
      */
     public function index()
     {
-        $sheets = Sheet::orderBy('id', 'desc')->pluck('title', 'id')->toArray();
+        $sheets = $this->company->sheet()->orderBy('id', 'desc')->pluck('title', 'id')->toArray();
         return view('machine.index', compact('sheets'));
     }
 
@@ -74,7 +74,7 @@ class MachineController extends Controller
     public function show($id)
     {
         $machine = Machine::findOrFail($id);
-        $sheets = Sheet::orderBy('id', 'desc')->pluck('title', 'id')->toArray();
+        $sheets = $this->company->sheet()->orderBy('id', 'desc')->pluck('title', 'id')->toArray();
         return view('machine._form', compact('machine', 'sheets'));
     }
 
@@ -124,7 +124,7 @@ class MachineController extends Controller
 
         $filter = $request->input('columns');
 
-        $query = Machine::where('id', '>', 0);
+        $query = $this->company->machine()->where('id', '>', 0);
         if ($search != '') {
             $query->where(function ($inner) use ($search){
                 $inner->orWhere('nick_name', 'like', '%' . $search . '%');

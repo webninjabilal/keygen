@@ -23,6 +23,11 @@
                         <i class="fa fa-sliders"></i> Roles
                     </a>
                 </li>
+                <li>
+                    <a href="{{ url('company') }}">
+                        <i class="fa fa-building-o"></i> Companies
+                    </a>
+                </li>
                 @endif
                 <li>
                     <a href="{{ url('auth/logout') }}">

@@ -17,10 +17,10 @@ class UnitController extends Controller
     {
         $this->middleware(function ($request, $next) {
             $this->user = Auth::user();
-
+            $this->company = Company::findOrFail(getSelectedCompany());
             return $next($request);
         });
-        $this->company = Company::findOrFail(getSelectedCompany());
+
     }
     /**
      * Display a listing of the resource.
@@ -79,8 +79,8 @@ class UnitController extends Controller
     public function update(UnitRequest $request, $id)
     {
         $unit_id  = $request->input('unit_id');
-        $sheet = Unit::findOrFail($unit_id);
-        $sheet->update($request->except('_token', 'unit_id'));
+        $unit = Unit::findOrFail($unit_id);
+        $unit->update($request->except('_token', 'unit_id'));
         flash()->success('Unit has been updated successfully!');
         return json_encode(['success' => true]);
     }
@@ -94,9 +94,12 @@ class UnitController extends Controller
     public function destroy(Request $request, $id)
     {
         $unit_id = $request->input('unit_id');
-        $sheet = Unit::findOrFail($unit_id);
-        $sheet->delete();
-        flash()->success('Unit Deleted Successfully');
+        $unit = $this->company->unit()->where('id', $unit_id)->first();
+        if($unit) {
+            $unit->delete();
+            flash()->success('Unit Deleted Successfully');
+        }
+        flash()->error('Unit has not found');
         return json_encode(['success' => true]);
     }
 
@@ -110,7 +113,7 @@ class UnitController extends Controller
 
         $filter = $request->input('columns');
 
-        $query = Unit::where('name', '!=', '');
+        $query = $this->company->unit()->where('name', '!=', '');
         if ($search != '') {
             $query->where(function ($inner) use ($search){
                 $inner->orWhere('name', 'like', '%' . $search . '%');

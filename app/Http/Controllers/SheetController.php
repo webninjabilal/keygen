@@ -17,10 +17,10 @@ class SheetController extends Controller
     {
         $this->middleware(function ($request, $next) {
             $this->user = Auth::user();
-
+            $this->company = Company::findOrFail(getSelectedCompany());
             return $next($request);
         });
-        $this->company = Company::findOrFail(getSelectedCompany());
+
     }
     /**
      * Display a listing of the resource.
@@ -65,8 +65,12 @@ class SheetController extends Controller
      */
     public function show($id)
     {
-        $sheet = Sheet::findOrFail($id);
-        return view('sheet._form', compact('sheet'));
+        $sheet = $this->company->sheet()->where('id', $id)->first();
+        if($sheet) {
+            return view('sheet._form', compact('sheet'));
+        } else {
+            return 'Ooops, something went wrong';
+        }
     }
 
     /**
@@ -121,7 +125,7 @@ class SheetController extends Controller
 
         $filter = $request->input('columns');
 
-        $query = Sheet::where('title', '!=', '');
+        $query = $this->company->sheet()->where('title', '!=', '');
         if ($search != '') {
             $query->where(function ($inner) use ($search){
                 $inner->orWhere('title', 'like', '%' . $search . '%');

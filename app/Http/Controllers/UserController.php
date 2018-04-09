@@ -24,7 +24,6 @@ class UserController extends Controller
             $this->user = Auth::user();
             $this->company = Company::findOrFail(getSelectedCompany());
             return $next($request);
-
         });
 
     }
@@ -70,7 +69,6 @@ class UserController extends Controller
             $user->first_name   = $creds['first_name'];
             $user->last_name    = $creds['last_name'];
             $user->email        = $creds['email'];
-            $user->gender       = $creds['gender'];
             $user->phone        = $creds['phone'];
             $user->password     = $creds['password'];
             $user->user_name    = $user_name;
@@ -82,8 +80,12 @@ class UserController extends Controller
         } else {
             $user = $checkUser;
         }
-        $role_id = $request->input('role_id');
-        if(!User::getUserRoleId($user->id)) {
+        if($this->user->isCustomer()) {
+            $role_id = User::getUserRoleId($this->user->id);
+        } else if($this->user->isAdmin()){
+            $role_id = $request->input('role_id');
+        }
+        if(isset($role_id) && !User::getUserRoleId($user->id)) {
             $user->assignRole($role_id);
         }
 
@@ -114,7 +116,9 @@ class UserController extends Controller
     public function update(UserRequest $request, $id)
     {
         $user_id = $request->input('user_id');
-        $user = User::findOrFail($user_id);
+        $user = User::whereHas('company', function($query) {
+            $query->where('company_id', $this->company->id);
+        })->findOrFail($user_id);
         $creds = $request->only('first_name', 'last_name', 'email', 'company', 'gender', 'phone');
 
 
@@ -155,7 +159,9 @@ class UserController extends Controller
     public function destroy(Request $request,$id)
     {
         $user_id = $request->input('user_id');
-        $user = User::findOrFail($user_id);
+        $user = User::whereHas('company', function($query) {
+            $query->where('company_id', $this->company->id);
+        })->findOrFail($user_id);
         $user->delete();
         flash()->success('User Deleted Successfully');
         return json_encode(['success' => true]);
@@ -176,7 +182,9 @@ class UserController extends Controller
         $order_col  = $order[0]['column'];
         $orderby    = $order[0]['dir'];
 
-        $query = User::where('email', '!=', '');
+        $query = User::whereHas('company', function($query) {
+            $query->where('company_id', $this->company->id);
+        })->where('email', '!=', '');
         if(!$this->user->isAdmin()) {
             $query->where('created_by', $this->user->id);
         }

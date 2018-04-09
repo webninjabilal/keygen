@@ -33,9 +33,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('user/add-cart-unit', 'UserController@postAddCartUnit')->name('user_add_cart_unit');
     Route::get('user/order/{num}', 'UserController@getUserOrder')->name('user_quick_view_order');
 
-    Route::get('company/records', 'CompanyController@records')->name('company_records');
-    Route::resource('company', 'CompanyController');
-
     //User Routes
     Route::get('user/records', 'UserController@records')->name('user_records');
     Route::post('user/create-machine', 'UserController@postCreateMachine')->name('user_machine_create');
@@ -57,6 +54,10 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::get('user-role/records', 'RoleController@records')->name('user_role_records');
         Route::resource('user-role', 'RoleController');
+
+        Route::get('company/records', 'CompanyController@records')->name('company_records');
+        Route::get('company/change-company/{num}', 'CompanyController@getChangeCompany')->name('company_change');
+        Route::resource('company', 'CompanyController');
     });
 });
 

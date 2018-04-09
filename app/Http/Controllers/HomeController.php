@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Company;
 use App\Sheet;
 use Illuminate\Http\Request;
 use Auth;
 
+
 class HomeController extends Controller
 {
+    protected $user = '';
+    protected $company = '';
     /**
      * Create a new controller instance.
      *
@@ -15,7 +19,11 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            $this->company = Company::findOrFail(getSelectedCompany());
+            return $next($request);
+        });
     }
 
     /**
@@ -31,7 +39,7 @@ class HomeController extends Controller
     {
         $user = Auth::user();
         $machines = $user->machine()->paginate(25);
-        $sheets = Sheet::orderBy('id', 'desc')->pluck('title', 'id')->toArray();
+        $sheets = $this->company->sheet()->orderBy('id', 'desc')->pluck('title', 'id')->toArray();
         $orders = $user->unit_order()->paginate(25);
         return view('user.my-account', compact('user', 'machines', 'sheets', 'orders'));
     }

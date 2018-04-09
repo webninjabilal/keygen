@@ -98,12 +98,17 @@ class Company extends Model
         return $list;
     }
 
+    public static function allCompanies()
+    {
+        return self::where('status', 1)->pluck('name', 'id')->toArray();
+    }
+
     public static function userLevelCompanies($user_id)
     {
         $user = User::findOrFail($user_id);
         $company_id = self::userCurrentCompany($user_id);
         if($user->isAdmin()) {
-            $companies = self::allUserCompanies($user_id);
+            $companies = self::allCompanies();
 
             /*$companies = self::childCompanies($company_id);
             $companies = $companies + self::allUserCompanies($user_id);*/
