@@ -18,7 +18,7 @@
                     <td>
                         @if(isset($user_machine_code->machine_user->machine->nick_name))
                             {{ $user_machine_code->machine_user->machine->nick_name }}
-                        @elseif($user_machine_code->machine->nick_name)
+                        @elseif(isset($user_machine_code->machine->nick_name))
                             {{ $user_machine_code->machine->nick_name }}
                         @endif
                     </td>
