@@ -19,8 +19,8 @@ class CreateMachinesTable extends Migration
                 $table->increments('id');
                 $table->integer('company_id')->unsigned();
                 $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
-                $table->integer('sheet_id')->unsigned();
-                $table->foreign('sheet_id')->references('id')->on('sheets')->onDelete('cascade');
+                $table->integer('sheet_id')->default(0);
+                //$table->foreign('sheet_id')->references('id')->on('sheets')->onDelete('cascade');
                 $table->string('nick_name');
                 $table->string('prefix', 5);
                 $table->integer('country_id')->default(0);
