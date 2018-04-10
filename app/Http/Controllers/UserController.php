@@ -341,7 +341,7 @@ class UserController extends Controller
         $customer           = $user->customer;
         $machines           = $this->company->machine()->whereIn('id', $customer->machine()->pluck('machine_id')->toArray());
         $machine_list       = $machines->pluck('nick_name', 'id')->toArray();
-        $user_machine_codes = MachineUserCode::whereIn('machine_user_id', $customer->machine()->active()->pluck('id')->toArray())->orderBy('created_at', 'desc')->where('created_by', $user->id)->paginate(25);
+        $user_machine_codes = MachineUserCode::whereIn('machine_user_id', $customer->machine()->pluck('id')->toArray())->orderBy('created_at', 'desc')->where('created_by', $user->id)->paginate(25);
         return view('user.machine_codes', compact('user', 'customer', 'machine_list', 'user_machine_codes'));
     }
 
