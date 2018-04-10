@@ -36,7 +36,7 @@ class CustomerController extends Controller
             $is_customer = true;
             $is_user = false;
             $user_machine_codes = MachineUserCode::where(function ($inner) use ($customer) {
-                $inner->orWhereIn('machine_user_id', $customer->machine()->acrive()->pluck('id')->toArray());
+                $inner->orWhereIn('machine_user_id', $customer->machine()->active()->pluck('id')->toArray());
                 $inner->orWhereIn('created_by', $customer->user()->pluck('id')->toArray());
             })->orderBy('created_at', 'desc')->paginate(25);
             return view('customer.detail', compact('customer', 'user_machine_codes', 'is_customer', 'is_user'));
