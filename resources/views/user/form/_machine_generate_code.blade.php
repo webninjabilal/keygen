@@ -1,6 +1,6 @@
 <div class="form-group">
     {!! Form::label('machine_id ','Select Machine *') !!}
-    {!! Form::select('machine_id' , $machine_list,  null, ['id' => 'sheet_id','class' => 'form-control','placeholder' => 'Select Sheet']) !!}
+    {!! Form::select('machine_id' , $machine_list,  null, ['id' => 'sheet_id','class' => 'form-control','placeholder' => 'Select Machine']) !!}
 </div>
 <div class="form-group">
     {!! Form::label('serial_number','Serial Number *') !!}
