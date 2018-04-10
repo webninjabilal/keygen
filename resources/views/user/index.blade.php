@@ -4,8 +4,8 @@
 @endsection
 <?php
     $user_heading = 'User';
-    if(isset($is_customer) and $is_customer) {
-        $user_heading = 'Customer';
+    if(Auth::user()->isAdmin()) {
+        $user_heading = 'Admin';
     }
 ?>
 @section('content')
