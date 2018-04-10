@@ -27,7 +27,6 @@ class MachineRequest extends FormRequest
         return [
             'nick_name' => 'required|min:3|max:255',
             'prefix' => 'required|min:1|max:3',
-            'sheet_id' => 'required',
         ];
     }
 }

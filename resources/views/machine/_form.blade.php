@@ -25,10 +25,10 @@
         <strong>Time Based</strong>
     </label>
 </div>--}}
-<div class="form-group">
+{{--<div class="form-group">
     {!! Form::label('sheet_id ','Select Sheet *') !!}
     {!! Form::select('sheet_id' , $sheets, $machine->sheet_id , ['class' => 'form-control','placeholder' => 'Select Sheet']) !!}
-</div>
+</div>--}}
 
 <div class="form-group">
     {!! Form::label('status ','Status') !!}

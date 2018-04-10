@@ -85,7 +85,9 @@ class Machine extends Model
     public function generate_code($used_date, $serial_number, $uses)
     {
         $random_numbers = $this->random_numbers;
-        $random_numbers = (!empty($random_numbers)) ? explode(',', $random_numbers) : [];
+        $random_numbers = nl2br($this->random_numbers);
+        $random_numbers = explode('<br />',$random_numbers);
+        //$random_numbers = (!empty($random_numbers)) ? explode(',', $random_numbers) : [];
         if(count($random_numbers) > 0) {
             $used_date_explode = explode('-', $used_date);
             

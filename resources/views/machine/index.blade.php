@@ -26,8 +26,8 @@
                                 <tr>
                                     <th>Nick Name</th>
                                     <th>Prefix</th>
-                                    <th>Type</th>
-                                    <th>Sheet</th>
+                                   {{-- <th>Type</th>--}}
+                                    {{--<th>Sheet</th>--}}
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>

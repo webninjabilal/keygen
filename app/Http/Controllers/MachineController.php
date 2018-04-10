@@ -142,11 +142,13 @@ class MachineController extends Controller
 
         if($machines) {
             foreach($machines AS $machine) {
+
+//                ($machine->is_time_base == 1) ? 'Time Based' : 'Unit Based',
+//                    (isset($machine->sheet->title)) ? $machine->sheet->title : '',
+
                 $data = [
                     $machine->nick_name,
                     $machine->prefix,
-                    ($machine->is_time_base == 1) ? 'Time Based' : 'Unit Based',
-                    (isset($machine->sheet->title)) ? $machine->sheet->title : '',
                     Machine::statuses($machine->status),
                     '<a href="javascript:void(0)" class="btn btn-white btn-sm" onclick="getMachine(' . $machine->id . ')"><i class="fa fa-pencil"></i> Edit</a>
                      <a href="javascript:void(0)" class="btn btn-white btn-sm" onclick="deleteMachine(' . $machine->id . ')"><i class="fa fa-trash-o"></i> Delete</a>

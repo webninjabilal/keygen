@@ -18,7 +18,8 @@
                         <span class="nav-label"> Users </span>
                     </a>
                 </li>
-                <li class="{{ (Request::is('sheet*')) ? ' active' : '' }}">
+                <!-- Comment this section as Raffy wants -->
+                {{--<li class="{{ (Request::is('sheet*')) ? ' active' : '' }}">
                     <a href="{{ route('sheet.index') }}"><i class="fa fa-file-excel-o" aria-hidden="true"></i>
                         <span class="nav-label">Manage Sheets </span>
                     </a>
@@ -27,7 +28,7 @@
                     <a href="{{ route('unit.index') }}"><i class="fa fa-gear" aria-hidden="true"></i>
                         <span class="nav-label"> Units </span>
                     </a>
-                </li>
+                </li>--}}
                 <li class="{{ (Request::is('machine*')) ? ' active' : '' }}">
                     <a href="{{ route('machine.index') }}"><i class="fa fa-gear" aria-hidden="true"></i>
                         <span class="nav-label"> Machines </span>
