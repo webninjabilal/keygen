@@ -35,4 +35,9 @@ class MachineUser extends Model
     {
         return $this->hasMany('App\MachineUserCode', 'machine_user_id');
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1);
+    }
 }

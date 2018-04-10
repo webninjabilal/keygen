@@ -18,7 +18,8 @@ class MachineUserCode extends Model
         'used_date',
         'uses',
         'code',
-        'created_by'
+        'created_by',
+        'machine_id'
     ];
 
     public function machine_user()
@@ -29,5 +30,10 @@ class MachineUserCode extends Model
     public function created_user()
     {
         return $this->belongsTo('App\User', 'created_by');
+    }
+
+    public function machine()
+    {
+        return $this->belongsTo('App\Machine', 'machine_id');
     }
 }

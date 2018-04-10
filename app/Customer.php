@@ -31,4 +31,9 @@ class Customer extends Model
     {
         return $this->hasMany('App\MachineUser', 'customer_id');
     }
+
+    public function user()
+    {
+        return $this->hasMany('\App\User', 'customer_id');
+    }
 }

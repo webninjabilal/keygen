@@ -15,7 +15,13 @@
         @if(count($user_machine_codes) > 0)
             @foreach($user_machine_codes AS $user_machine_code)
                 <tr class="machine_row" data-id="{{ $user_machine_code->id }}">
-                    <td>{{ (isset($user_machine_code->machine_user->machine->nick_name)) ? $user_machine_code->machine_user->machine->nick_name : '' }}</td>
+                    <td>
+                        @if(isset($user_machine_code->machine_user->machine->nick_name))
+                            {{ $user_machine_code->machine_user->machine->nick_name }}
+                        @elseif($user_machine_code->machine->nick_name)
+                            {{ $user_machine_code->machine->nick_name }}
+                        @endif
+                    </td>
                     <td>{{ (isset($user_machine_code->created_user->full_name)) ? $user_machine_code->created_user->full_name : ''  }}</td>
                     <td>{{ $user_machine_code->serial_number }}</td>
                     <td>{{ $user_machine_code->uses }}</td>

@@ -35,7 +35,10 @@ class CustomerController extends Controller
         if($customer) {
             $is_customer = true;
             $is_user = false;
-            $user_machine_codes = MachineUserCode::whereIn('machine_user_id', $customer->machine()->pluck('id')->toArray())->orderBy('created_at', 'desc')->paginate(25);
+            $user_machine_codes = MachineUserCode::where(function ($inner) use ($customer) {
+                $inner->orWhereIn('machine_user_id', $customer->machine()->acrive()->pluck('id')->toArray());
+                $inner->orWhereIn('created_by', $customer->user()->pluck('id')->toArray());
+            })->orderBy('created_at', 'desc')->paginate(25);
             return view('customer.detail', compact('customer', 'user_machine_codes', 'is_customer', 'is_user'));
         }
     }
@@ -70,13 +73,18 @@ class CustomerController extends Controller
 
     private function machines_attach($customer, $machine_ids)
     {
-        $customer->machine()->whereNotIn('machine_id', $machine_ids)->delete();
+        $customer->machine()->whereNotIn('machine_id', $machine_ids)->update(['status' => 2]);
         if(count($machine_ids) > 0) {
-            foreach ($machine_ids as $machine_id) {
+            foreach ($machine_ids AS $machine_id) {
                 $checkMachine = $customer->machine()->where('machine_id',$machine_id)->first();
                 if(!$checkMachine) {
                     $customer->machine()->create([
-                        'machine_id' => $machine_id
+                        'machine_id' => $machine_id,
+                        'status' => 1
+                    ]);
+                } else {
+                    $checkMachine->update([
+                        'status' => 1
                     ]);
                 }
             }

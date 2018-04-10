@@ -341,7 +341,7 @@ class UserController extends Controller
         $customer           = $user->customer;
         $machines           = $this->company->machine()->whereIn('id', $customer->machine()->pluck('machine_id')->toArray());
         $machine_list       = $machines->pluck('nick_name', 'id')->toArray();
-        $user_machine_codes = MachineUserCode::whereIn('machine_user_id', $customer->machine()->pluck('id')->toArray())->orderBy('created_at', 'desc')->where('created_by', $user->id)->paginate(25);
+        $user_machine_codes = MachineUserCode::whereIn('machine_user_id', $customer->machine()->acrive()->pluck('id')->toArray())->orderBy('created_at', 'desc')->where('created_by', $user->id)->paginate(25);
         return view('user.machine_codes', compact('user', 'customer', 'machine_list', 'user_machine_codes'));
     }
 
@@ -362,22 +362,18 @@ class UserController extends Controller
                 return json_encode(['success' => false, 'errors' => 'Code is not generated, please try it again with different values']);
             }
             if($machine_code and !empty($machine_code)) {
-                $checkCodeAlready = $user_machine->code()->where('code', $machine_code)->first();
-                if(!$checkCodeAlready) {
-                    $user_machine->code()->create([
-                        'serial_number' => $serial_number,
-                        'used_date'     => $used_date,
-                        'uses'          => $uses,
-                        'code'          => $machine_code,
-                        'status'        => 1,
-                        'created_by'    => $this->user->id,
-                    ]);
-                    flash()->success('Code is generated successfully.');
-                    return json_encode(['success' => true]);
-                } else {
-                    flash()->error('Code '.$machine_code.' is already found for '.$machine->nick_name);
-                    return json_encode(['success' => false, 'errors' => 'Code '.$machine_code.' is already found for that machine']);
-                }
+                $user_machine->code()->create([
+                    'serial_number' => $serial_number,
+                    'used_date'     => $used_date,
+                    'uses'          => $uses,
+                    'code'          => $machine_code,
+                    'status'        => 1,
+                    'created_by'    => $this->user->id,
+                    'machine_id'    => $machine->id
+                ]);
+                flash()->success('Code is generated successfully.');
+                return json_encode(['success' => true]);
+                //$checkCodeAlready = $user_machine->code()->where('code', $machine_code)->first();
             }
         }
         return json_encode(['success' => false, 'errors' => 'Oops, somethings went wrong']);

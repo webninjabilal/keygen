@@ -7,7 +7,7 @@
     <?php
     $customer_machines = [];
     if($customer->id > 0)
-        $customer_machines = \App\MachineUser::where('customer_id', $customer->id)->pluck('machine_id')->toArray();
+        $customer_machines = \App\MachineUser::where('customer_id', $customer->id)->acrive()->pluck('machine_id')->toArray();
     ?>
     <div class="row">
         <div class="col-sm-12">
