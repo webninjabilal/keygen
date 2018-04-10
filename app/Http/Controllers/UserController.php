@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Company;
+use App\Http\Requests\MachineGenerateCodeRequest;
 use App\Http\Requests\MachineRequest;
 use App\Http\Requests\UnitCartRequest;
 use App\Http\Requests\UserRequest;
 use App\Machine;
+use App\Role;
 use App\Sheet;
 use App\User;
 use Carbon\Carbon;
@@ -35,7 +37,18 @@ class UserController extends Controller
     public function index()
     {
         $company_list = Company::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
-        return view('user.index', compact('company_list'));
+        $is_customer = false;
+        $is_user  = true;
+        $machine_list = [];
+        return view('user.index', compact('company_list', 'is_customer', 'is_user', 'machine_list'));
+    }
+
+    public function getCustomer()
+    {
+        $is_customer = true;
+        $is_user  = false;
+        $machine_list = $this->company->machine()->get();
+        return view('user.index', compact('is_customer', 'is_user', 'machine_list'));
     }
 
     /**
@@ -89,6 +102,10 @@ class UserController extends Controller
             $user->assignRole($role_id);
         }
 
+        $machine_ids = $request->input('machine_id');
+        if($user->isCustomer()) {
+            $this->user_machines_attach($user, $machine_ids);
+        }
         flash()->success('User added Successfully!');
         return json_encode(array('success' => true));
     }
@@ -103,7 +120,11 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $company_list = Company::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
-        return view('user.form._form', compact('user', 'company_list'));
+        $machine_list = [];
+        if($user->isCustomer()) {
+            $machine_list = $this->company->machine()->get();
+        }
+        return view('user.form._form', compact('user', 'company_list', 'machine_list'));
     }
 
     /**
@@ -146,8 +167,27 @@ class UserController extends Controller
                 $user->assignRole($role_id);
             }
         }
+        $machine_ids = $request->input('machine_id');
+        if($user->isCustomer()) {
+            $this->user_machines_attach($user, $machine_ids);
+        }
         flash()->success('User updated successfully');
         return json_encode(['success' => true]);
+    }
+
+    private function user_machines_attach($user, $machine_ids)
+    {
+        $user->machine_user()->whereNotIn('machine_id', $machine_ids)->delete();
+        if(count($machine_ids) > 0) {
+            foreach ($machine_ids as $machine_id) {
+                $checkMachine = $user->machine_user()->where('machine_id',$machine_id)->first();
+                if(!$checkMachine) {
+                    $user->machine_user()->create([
+                        'machine_id' => $machine_id
+                    ]);
+                }
+            }
+        }
     }
 
     /**
@@ -177,10 +217,12 @@ class UserController extends Controller
         $limit = $request->input('length');
 
         $filter = $request->input('columns');
+        $filter_type = $filter[0]['search']['value'];
 
         $order      = $request->input('order');
         $order_col  = $order[0]['column'];
         $orderby    = $order[0]['dir'];
+
 
         $query = User::whereHas('company', function($query) {
             $query->where('company_id', $this->company->id);
@@ -188,6 +230,29 @@ class UserController extends Controller
         if(!$this->user->isAdmin()) {
             $query->where('created_by', $this->user->id);
         }
+
+        $role_ids = [];
+        if($filter_type == 'customer') {
+            if(!$this->user->isAdmin()) {
+                $user_role_id = User::getUserRoleId($this->user->id);
+                if($user_role_id) {
+                    $role_ids = [User::getUserRoleId($this->user->id)];
+                }
+            } else {
+                $role_ids = Role::where('name', 'Customer')->pluck('id')->toArray();
+            }
+            $query->whereHas('roles', function($query) use ($role_ids) {
+                $query->whereIn('role_id', $role_ids);
+            });
+        } elseif($filter_type == 'admin') {
+            if($this->user->isAdmin()) {
+                $role_ids = Role::where('name', 'Admin')->pluck('id')->toArray();
+                $query->whereHas('roles', function($query) use ($role_ids) {
+                    $query->whereIn('role_id', $role_ids);
+                });
+            }
+        }
+
         if ($search != '') {
             $query->where(function ($inner) use ($search){
                 $inner->orWhere('company', 'like', '%' . $search . '%');
@@ -249,6 +314,54 @@ class UserController extends Controller
             return false;
         }
         return true;
+    }
+
+    public function getMachineCode()
+    {
+        $machine        = $this->company->machine()->where('id', 1)->first();
+        $user_machine   = $this->user->machine_user()->where('machine_id', 1)->first();
+        if($machine and $user_machine) {
+            $used_date = $user_machine->used_date;
+            echo $machine_code = $machine->generate_code($user_machine->used_date, $user_machine->serial_number, $user_machine->uses);
+        }
+    }
+
+    public function postMachineGenerateCode(MachineGenerateCodeRequest $request)
+    {
+
+        $serial_number  = $request->input('serial_number');
+        $uses           = $request->input('uses');
+        $machine_id     = $request->input('machine_id');
+        $used_date      = $request->input('used_date');
+        $used_date      = (!empty($used_date)) ? Carbon::createFromFormat('m/d/Y', $used_date)->format('Y-m-d') : date('Y-m-d');
+        $machine        = $this->company->machine()->where('id', $machine_id)->first();
+        $user_machine   = $this->user->machine_user()->where('machine_id', $machine_id)->first();
+        if($machine and $user_machine) {
+            $machine_code = $machine->generate_code($used_date, $serial_number, $uses);
+            if(!$machine_code) {
+                flash()->error('Code is not generated');
+                return json_encode(['success' => false, 'errors' => 'Code is not generated, please try it again with different values']);
+            }
+            if($machine_code and !empty($machine_code)) {
+                $checkCodeAlready = $user_machine->code()->where('code', $machine_code)->first();
+                if(!$checkCodeAlready) {
+                    $user_machine->code()->create([
+                        'serial_number' => $serial_number,
+                        'used_date'     => $used_date,
+                        'uses'          => $uses,
+                        'code'          => $machine_code,
+                        'status'        => 1,
+                        'created_by'    => $this->user->id,
+                    ]);
+                    flash()->success('Code is generated successfully.');
+                    return json_encode(['success' => true]);
+                } else {
+                    flash()->error('Code '.$machine_code.' is already found for '.$machine->nick_name);
+                    return json_encode(['success' => false, 'errors' => 'Code '.$machine_code.' is already found for that machine']);
+                }
+            }
+        }
+        return json_encode(['success' => false, 'errors' => 'Oops, somethings went wrong']);
     }
 
     public function postCreateMachine(MachineRequest $request)

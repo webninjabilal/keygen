@@ -23,8 +23,8 @@ class CreateMachinesTable extends Migration
                 $table->foreign('sheet_id')->references('id')->on('sheets')->onDelete('cascade');
                 $table->string('nick_name');
                 $table->string('prefix', 5);
-                $table->string('serial_number');
-                $table->tinyInteger('is_time_base')->default(0);
+                $table->integer('country_id')->default(0);
+                $table->text('random_numbers')->nullable();
                 $table->tinyInteger('status')->default(1);
                 $table->integer('user_id')->unsigned();
                 $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

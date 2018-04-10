@@ -1,5 +1,6 @@
 <script>
     $(document).ready(function () {
+        dateGroupDiv('#machine_generate_code .date');
         $('.edit_machine').on('click', function () {
             var machine_id = $(this).closest('tr').data('id');
             $.ajax({
@@ -41,6 +42,9 @@
     });
     function saveMachine() {
         return reloadAjaxSubmit('create_machine',"{{ route('user_machine_create') }}",'nick_name','Submit');
+    }
+    function generateMachineCode() {
+        return reloadAjaxSubmit('machine_generate_code',"{{ route('user_machine_generate_code') }}",'machine_id','Submit');
     }
     function updateMachine() {
         return reloadAjaxSubmit('update_machine',"{{ url('user/machine-update') }}",'nick_name','Update');

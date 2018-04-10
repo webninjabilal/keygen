@@ -136,6 +136,11 @@ class User extends Authenticatable
         return $this->hasMany('App\Machine', 'user_id');
     }
 
+    public function machine_user()
+    {
+        return $this->hasMany('App\MachineUser', 'user_id');
+    }
+
     public function unit_order() {
         return $this->hasMany('App\UserUnitOrder', 'user_id');
     }

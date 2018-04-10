@@ -1,34 +1,33 @@
 <div class="col-sm-12">
-    <a class="btn btn-primary  pull-right" href="javascript:void(0);" data-toggle="modal" data-target="#create_machine"><i class="fa fa-plus"></i> Add Machine</a>
+    <a class="btn btn-primary  pull-right" href="javascript:void(0);" data-toggle="modal" data-target="#machine_generate_code"><i class="fa fa-plus"></i>  Generate Code</a>
 </div>
 <div class="clearfix"></div>
 <div class="table-responsive">
     <table id="" class="table table-striped table-bordered table-hover" >
         <thead>
         <tr>
-            <th>Nick Name</th>
-            <th>Prefix</th>
+            <th>Machine Name</th>
             <th>Serial</th>
-            <th>Action</th>
+            <th>Uses</th>
+            <th>Date</th>
+            <th>Generated Code</th>
         </tr>
         </thead>
         <tbody>
-            @if(count($machines) > 0)
-                @foreach($machines AS $machine)
-                    <tr class="machine_row" data-id="{{ $machine->id }}">
-                        <td>{{ $machine->nick_name }}</td>
-                        <td>{{ $machine->prefix }}</td>
-                        <td>{{ $machine->serial_number }}</td>
-                        <td>
-                            <a href="javascript:void(0)" class="btn btn-white btn-sm edit_machine"><i class="fa fa-pencil"></i> Edit</a>
-                            <a href="javascript:void(0)" class="btn btn-white btn-sm delete_machine"><i class="fa fa-trash-o"></i> Delete</a>
-                        </td>
+            @if(count($user_machine_codes) > 0)
+                @foreach($user_machine_codes AS $user_machine_code)
+                    <tr class="machine_row" data-id="{{ $user_machine_code->id }}">
+                        <td>{{ (isset($user_machine_code->machine_user->machine->nick_name)) ? $user_machine_code->machine_user->machine->nick_name : '' }}</td>
+                        <td>{{ $user_machine_code->serial_number }}</td>
+                        <td>{{ $user_machine_code->uses }}</td>
+                        <td>{{ (!empty($user_machine_code->used_date)) ? \Carbon\Carbon::createFromFormat('Y-m-d', $user_machine_code->used_date)->format('m/d/Y') : ''  }}</td>
+                        <td>{{ $user_machine_code->code }}</td>
                     </tr>
                 @endforeach
             @endif
         </tbody>
     </table>
     <div class="col-sm-12 pull-right">
-        {!! $machines->render() !!}
+        {!! $user_machine_codes->render() !!}
     </div>
 </div>

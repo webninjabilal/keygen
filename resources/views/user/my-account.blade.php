@@ -41,7 +41,7 @@
                                     <div id="tab-my-account" class="tab-pane active">
                                         <div class="panel-body">
                                 @endif
-                                                {!! Form::open(['method' => 'PUT' , 'onsubmit' => 'return updateUser();']) !!}
+                                                {!! Form::open(['method' => 'PUT' , 'onsubmit' => 'return updateMyAccount();']) !!}
                                                 @include('user.form._form', compact('user'))
                                                 <div class="form-group">
                                                     <button type="submit" class="btn btn-primary">Update</button>
@@ -114,13 +114,14 @@
                 window.location.hash = hasShow;
             });
         });
-        function updateUser() {
+        function updateMyAccount() {
 
             var validate = customValidations('my_account');
             if(!validate){
                 return false;
             }
-            var user_id = $('#my_account').find('input[name=user_id]').val();
+
+            var user_id = $('#tab-my-account form').find('input[name=user_id]').val();
             return reloadAjaxSubmit('my_account',"{{ url('user') }}/"+user_id,'name','Update');
         }
 

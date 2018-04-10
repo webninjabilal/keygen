@@ -1,4 +1,8 @@
 <script>
+    var filter_type = 'customer';
+    @if(isset($is_user) and $is_user)
+        filter_type = 'admin';
+    @endif
     $(document).ready(function () {
         var oTable = $('#user_list').dataTable({
             "oLanguage": { "sSearch": "" } ,
@@ -7,7 +11,12 @@
             serverSide: true,
             pageLength: 25,
             bSort: false,
-            ajax : "{{ route('user_records') }}"
+            ajax : {
+                url: '{{ route('user_records') }}',
+                data: function(d){
+                    d.columns[0].search.value = filter_type;
+                }
+            },
         });
     });
     function saveUser() {

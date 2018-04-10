@@ -1,14 +1,14 @@
-<?php $machine = new \App\Machine(); ?>
-<div class="modal inmodal fade" id="create_machine" tabindex="-1" role="dialog"  aria-hidden="true">
+<?php $machine = new \App\MachineUser(); ?>
+<div class="modal inmodal fade" id="machine_generate_code" tabindex="-1" role="dialog"  aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            {!! Form::open(['onsubmit' => 'return saveMachine();']) !!}
+            {!! Form::open(['onsubmit' => 'return generateMachineCode();']) !!}
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title">Add Machine</h4>
+                <h4 class="modal-title">Generate Code</h4>
             </div>
             <div class="modal-body">
-                @include('user.form._form_machine',compact('machine'))
+                @include('user.form._machine_generate_code',compact('machine'))
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>

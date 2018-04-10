@@ -55,11 +55,11 @@ class MachineController extends Controller
     {
         $machine = new Machine();
         $input = $request->except('_token');
-        $input['is_time_base'] = (isset($input['is_time_base'])) ? 1 : 0;
+
         $input['company_id'] = $this->company->id;
-        if(!$machine->checkSerialAvail($input['serial_number'], $input['sheet_id'])){
+        /*if(!$machine->checkSerialAvail($input['serial_number'], $input['sheet_id'])){
             return json_encode(['success' => false, 'errors' => 'Serial Number is not available please try it with different one.']);
-        }
+        }*/
         $this->user->machine()->create($input);
         flash()->success('Machine has been added successfully!');
         return json_encode(['success' => true]);
@@ -90,10 +90,10 @@ class MachineController extends Controller
         $machine_id  = $request->input('machine_id');
         $machine = Machine::findOrFail($machine_id);
         $input = $request->except('_token', 'machine_id');
-        if(!$machine->checkSerialAvail($input['serial_number'], $input['sheet_id'])){
+        /*if(!$machine->checkSerialAvail($input['serial_number'], $input['sheet_id'])){
             return json_encode(['success' => false, 'errors' => 'Serial Number is not available please try it with different one.']);
-        }
-        $input['is_time_base'] = (isset($input['is_time_base'])) ? 1 : 0;
+        }*/
+        //$input['is_time_base'] = (isset($input['is_time_base'])) ? 1 : 0;
         $machine->update($input);
         flash()->success('Machine has been updated successfully!');
         return json_encode(['success' => true]);

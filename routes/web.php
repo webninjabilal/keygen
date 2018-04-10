@@ -35,10 +35,13 @@ Route::group(['middleware' => ['auth']], function () {
 
     //User Routes
     Route::get('user/records', 'UserController@records')->name('user_records');
+    //Route::get('user/machine-code', 'UserController@getMachineCode')->name('getMachineCode');
+    Route::get('/customer', 'UserController@getCustomer')->name('customers');
     Route::post('user/create-machine', 'UserController@postCreateMachine')->name('user_machine_create');
     Route::get('user/update-machine/{num}', 'UserController@getUpdateMachine')->name('user_machine_get');
     Route::post('user/machine-update', 'UserController@postUpdateMachine')->name('user_machine_update');
     Route::post('user/delete-machine', 'UserController@postDeleteMachine')->name('user_machine_delete');
+    Route::post('user/machine-generate-code', 'UserController@postMachineGenerateCode')->name('user_machine_generate_code');
     Route::resource('user', 'UserController');
 
 

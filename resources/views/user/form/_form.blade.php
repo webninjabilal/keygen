@@ -23,16 +23,26 @@
         {!! Form::password('password' ,  ['class' => 'form-control','required' => (($user->id > 0) ? false : true)]) !!}
     </div>
 
-    <div class="form-group">
+    {{--<div class="form-group">
         {!! Form::label('user_name','User Login name') !!}
         {!! Form::text('user_name' , $user->user_name, ['class' => 'form-control', 'placeholder' => 'Unique User Login name']) !!}
-    </div>
-    {{--@if(!isset($is_my_account))
+    </div>--}}
+    @if(!isset($is_my_account) and count($machine_list) > 0)
+        <?php
+        $user_machines = [];
+        if($user->id > 0)
+            $user_machines = \App\MachineUser::where('user_id', $user->id)->pluck('machine_id')->toArray();
+        ?>
         <div class="form-group">
-            {!! Form::label('company_id','Company') !!}
-            {!! Form::select('company_id', $company_list, ($user->id > 0) ? \App\Company::userCurrentCompany($user->id) : null , ['id' => 'company_id','class' => 'form-control']) !!}
+            <h3>Machines</h3>
+            @foreach($machine_list AS $machine)
+                <label>
+                    {!! Form::checkbox('machine_id[]',$machine->id, (in_array($machine->id, $user_machines) ? true : false)) !!}
+                    <strong>{{ $machine->nick_name }}</strong>
+                </label>
+            @endforeach
         </div>
-    @endif--}}
+    @endif
     @if(!isset($is_my_account))
         <?php
         $role_id = null;
@@ -52,16 +62,21 @@
             $role_id    = \App\User::getUserRoleId($user->id);
         }
         ?>
-        @if(count($role_list) > 1 and Auth::user()->isAdmin())
-            <div class="form-group">
-                {!! Form::label('role_id','Roles') !!}
-                {!! Form::select('role_id', $role_list, $role_id , ['id' => 'role_id','class' => 'form-control']) !!}
-            </div>
-        @else
+        @if(isset($is_customer) and $is_customer)
             {!! Form::hidden('role_id', 2) !!}
+        @elseif(isset($is_user) and $is_user)
+            {!! Form::hidden('role_id', 1) !!}
         @endif
+        {!! Form::hidden('role_id', 2) !!}
+        {{--@if(count($role_list) > 1 and Auth::user()->isAdmin())--}}
+            {{--<div class="form-group">--}}
+                {{--{!! Form::label('role_id','Roles') !!}--}}
+                {{--{!! Form::select('role_id', $role_list, $role_id , ['id' => 'role_id','class' => 'form-control']) !!}--}}
+            {{--</div>--}}
+        {{--@else--}}
+            {{--{!! Form::hidden('role_id', 2) !!}--}}
+        {{--@endif--}}
     @endif
-
 <div class="clearfix"></div>
 
 @if($user->id > 0)
