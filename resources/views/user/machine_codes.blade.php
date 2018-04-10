@@ -48,6 +48,9 @@
 @section('footer')
 
     <script>
+        $(document).ready(function () {
+            dateGroupDiv('#machine_generate_code .date');
+        });
         function generateMachineCode() {
             return reloadAjaxSubmit('machine_generate_code',"{{ route('user_machine_generate_code') }}",'machine_id','Submit');
         }
