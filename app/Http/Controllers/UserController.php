@@ -8,6 +8,7 @@ use App\Http\Requests\MachineRequest;
 use App\Http\Requests\UnitCartRequest;
 use App\Http\Requests\UserRequest;
 use App\Machine;
+use App\MachineUserCode;
 use App\Role;
 use App\Sheet;
 use App\User;
@@ -95,6 +96,8 @@ class UserController extends Controller
         }
         if($this->user->isCustomer()) {
             $role_id = User::getUserRoleId($this->user->id);
+            $user->customer_id = $this->user->customer_id;
+            $user->update();
         } else if($this->user->isAdmin()){
             $role_id = $request->input('role_id');
         }
@@ -102,10 +105,11 @@ class UserController extends Controller
             $user->assignRole($role_id);
         }
 
-        $machine_ids = $request->input('machine_id');
-        if($user->isCustomer()) {
-            $this->user_machines_attach($user, $machine_ids);
+        if($request->has('customer_id')) {
+            $user->customer_id = $request->input('customer_id');
+            $user->update();
         }
+
         flash()->success('User added Successfully!');
         return json_encode(array('success' => true));
     }
@@ -167,10 +171,10 @@ class UserController extends Controller
                 $user->assignRole($role_id);
             }
         }
-        $machine_ids = $request->input('machine_id');
+        /*$machine_ids = $request->input('machine_id');
         if($user->isCustomer()) {
             $this->user_machines_attach($user, $machine_ids);
-        }
+        }*/
         flash()->success('User updated successfully');
         return json_encode(['success' => true]);
     }
@@ -218,6 +222,7 @@ class UserController extends Controller
 
         $filter = $request->input('columns');
         $filter_type = $filter[0]['search']['value'];
+        $customer_id = $filter[1]['search']['value'];
 
         $order      = $request->input('order');
         $order_col  = $order[0]['column'];
@@ -244,6 +249,7 @@ class UserController extends Controller
             $query->whereHas('roles', function($query) use ($role_ids) {
                 $query->whereIn('role_id', $role_ids);
             });
+
         } elseif($filter_type == 'admin') {
             if($this->user->isAdmin()) {
                 $role_ids = Role::where('name', 'Admin')->pluck('id')->toArray();
@@ -253,9 +259,12 @@ class UserController extends Controller
             }
         }
 
+        if(!empty($customer_id)) {
+            $query->where('customer_id', $customer_id);
+        }
+
         if ($search != '') {
             $query->where(function ($inner) use ($search){
-                $inner->orWhere('company', 'like', '%' . $search . '%');
                 $inner->orWhere('first_name', 'like', '%' . $search . '%');
                 $inner->orWhere('last_name', 'like', '%' . $search . '%');
                 $inner->orWhere('email', 'like', '%' . $search . '%');
@@ -265,6 +274,7 @@ class UserController extends Controller
 
 
         $query->orderBy('id', 'DESC');
+
         $total_records = $query->count();
 
         $users = $query->limit($limit)->offset($start)->get();
@@ -299,7 +309,6 @@ class UserController extends Controller
             "recordsTotal" => $total_records,
             "recordsFiltered" => $total_records,
             "aaData" => $records,
-            "sColumns" => 'first_name,last_name,email,company,role,status,actions'
         ];
     }
 
@@ -326,16 +335,26 @@ class UserController extends Controller
         }
     }
 
+    public function userMachineCodes()
+    {
+        $user               = $this->user;
+        $customer           = $user->customer;
+        $machines           = $this->company->machine()->whereIn('id', $customer->machine()->pluck('machine_id')->toArray());
+        $machine_list       = $machines->pluck('nick_name', 'id')->toArray();
+        $user_machine_codes = MachineUserCode::whereIn('machine_user_id', $customer->machine()->pluck('id')->toArray())->orderBy('created_at', 'desc')->where('created_by', $user->id)->paginate(25);
+        return view('user.machine_codes', compact('user', 'customer', 'machine_list', 'user_machine_codes'));
+    }
+
     public function postMachineGenerateCode(MachineGenerateCodeRequest $request)
     {
-
+        $customer       = $this->user->customer;
         $serial_number  = $request->input('serial_number');
         $uses           = $request->input('uses');
         $machine_id     = $request->input('machine_id');
         $used_date      = $request->input('used_date');
         $used_date      = (!empty($used_date)) ? Carbon::createFromFormat('m/d/Y', $used_date)->format('Y-m-d') : date('Y-m-d');
         $machine        = $this->company->machine()->where('id', $machine_id)->first();
-        $user_machine   = $this->user->machine_user()->where('machine_id', $machine_id)->first();
+        $user_machine   = $customer->machine()->where('machine_id', $machine_id)->first();
         if($machine and $user_machine) {
             $machine_code = $machine->generate_code($used_date, $serial_number, $uses);
             if(!$machine_code) {

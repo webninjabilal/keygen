@@ -22,17 +22,17 @@
                         <div class="clearfix"></div>
                         <div class="row" id="my_account">
                             <div class="col-sm-12">
-                                @if($user->isCustomer())
+                            @if(!$user->isCustomer() and !$user->isAdmin())
                                 <ul class="nav nav-tabs">
                                     <li class="active">
                                         <a  data-toggle="tab" data-id="my-profile" href="#tab-my-account">My Account</a>
                                     </li>
                                     <li>
-                                        <a  data-toggle="tab" data-id="my-machines" href="#tab-machines">Machines</a>
+                                        <a  data-toggle="tab" data-id="my-codes" href="#tab-codes">Codes</a>
                                     </li>
-                                    <li>
+                                    {{--<li>
                                         <a  data-toggle="tab" data-id="my-orders" href="#tab-orders">Orders</a>
-                                    </li>
+                                    </li>--}}
                                     <li>
                                         <a  data-toggle="tab" data-id="my-users" href="#tab-users">Users</a>
                                     </li>
@@ -47,19 +47,19 @@
                                                     <button type="submit" class="btn btn-primary">Update</button>
                                                 </div>
                                                 {!! Form::close() !!}
-                                @if($user->isCustomer())
+                                @if(!$user->isCustomer()  and !$user->isAdmin())
                                         </div>
                                     </div>
-                                    <div id="tab-machines" class="tab-pane">
+                                    <div id="tab-codes" class="tab-pane">
                                         <div class="panel-body">
                                             @include('user.machine')
                                         </div>
                                     </div>
-                                    <div id="tab-orders" class="tab-pane">
+                                    {{--<div id="tab-orders" class="tab-pane">
                                         <div class="panel-body">
                                             @include('user.orders')
                                         </div>
-                                    </div>
+                                    </div>--}}
                                     <div id="tab-users" class="tab-pane">
                                         <div class="panel-body">
                                             @include('flash::message')
@@ -151,6 +151,6 @@
             return true;
         }
     </script>
-    @include('user._script')
+
     @include('user._basic_script')
 @endsection

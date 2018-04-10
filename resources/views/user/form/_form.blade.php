@@ -27,22 +27,7 @@
         {!! Form::label('user_name','User Login name') !!}
         {!! Form::text('user_name' , $user->user_name, ['class' => 'form-control', 'placeholder' => 'Unique User Login name']) !!}
     </div>--}}
-    @if(!isset($is_my_account) and count($machine_list) > 0)
-        <?php
-        $user_machines = [];
-        if($user->id > 0)
-            $user_machines = \App\MachineUser::where('user_id', $user->id)->pluck('machine_id')->toArray();
-        ?>
-        <div class="form-group">
-            <h3>Machines</h3>
-            @foreach($machine_list AS $machine)
-                <label>
-                    {!! Form::checkbox('machine_id[]',$machine->id, (in_array($machine->id, $user_machines) ? true : false)) !!}
-                    <strong>{{ $machine->nick_name }}</strong>
-                </label>
-            @endforeach
-        </div>
-    @endif
+
     @if(!isset($is_my_account))
         <?php
         $role_id = null;
@@ -67,7 +52,10 @@
         @elseif(isset($is_user) and $is_user)
             {!! Form::hidden('role_id', 1) !!}
         @endif
-        {!! Form::hidden('role_id', 2) !!}
+        @if(isset($customer) or $user->customer_id > 0)
+            <?php $customer_id = ($user->customer_id > 0) ? $user->customer_id : $customer->id ?>
+            {!! Form::hidden('customer_id', $customer_id) !!}
+        @endif
         {{--@if(count($role_list) > 1 and Auth::user()->isAdmin())--}}
             {{--<div class="form-group">--}}
                 {{--{!! Form::label('role_id','Roles') !!}--}}

@@ -9,8 +9,9 @@
             <th>Machine Name</th>
             <th>Serial</th>
             <th>Uses</th>
-            <th>Date</th>
+            <th>Machine Date</th>
             <th>Generated Code</th>
+            <th>Generated at</th>
         </tr>
         </thead>
         <tbody>
@@ -22,6 +23,7 @@
                         <td>{{ $user_machine_code->uses }}</td>
                         <td>{{ (!empty($user_machine_code->used_date)) ? \Carbon\Carbon::createFromFormat('Y-m-d', $user_machine_code->used_date)->format('m/d/Y') : ''  }}</td>
                         <td>{{ $user_machine_code->code }}</td>
+                        <td>{{ $user_machine_code->created_at->format('m/d/Y h:i:s A') }}</td>
                     </tr>
                 @endforeach
             @endif

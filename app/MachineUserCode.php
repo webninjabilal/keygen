@@ -25,4 +25,9 @@ class MachineUserCode extends Model
     {
         return $this->belongsTo('App\MachineUser', 'machine_user_id');
     }
+
+    public function created_user()
+    {
+        return $this->belongsTo('App\User', 'created_by');
+    }
 }

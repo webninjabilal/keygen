@@ -17,8 +17,8 @@ class CreateMachineUsersTable extends Migration
             $table->increments('id');
             $table->integer('machine_id')->unsigned();
             $table->foreign('machine_id')->references('id')->on('machines')->onDelete('cascade');
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('customer_id')->unsigned();
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
             $table->tinyInteger('status')->default(0);
             $table->timestamps();
             $table->softDeletes();

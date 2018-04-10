@@ -51,6 +51,10 @@ class Company extends Model
         return $this->hasMany('App\Machine', 'company_id');
     }
 
+    public function customer() {
+        return $this->hasMany('App\Customer', 'company_id');
+    }
+
     public static function userCurrentCompany($user_id)
     {
         $currentCompany = DB::table('company_user')

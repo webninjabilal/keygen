@@ -15,6 +15,9 @@
                 url: '{{ route('user_records') }}',
                 data: function(d){
                     d.columns[0].search.value = filter_type;
+                    @if(isset($customer) and $customer->id > 0)
+                        d.columns[1].search.value = '{{ $customer->id }}';
+                    @endif
                 }
             },
         });

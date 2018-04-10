@@ -30,12 +30,21 @@
                         <table id="user_list" class="table table-striped table-bordered table-hover" >
                             <thead>
                             <tr>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Email Address</th>
-                                <th>Type</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                @if(\Auth::user()->isAdmin())
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email Address</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                @else
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email Address</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+
+                                @endif
                             </tr>
                             </thead>
                         </table>

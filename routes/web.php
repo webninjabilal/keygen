@@ -36,11 +36,13 @@ Route::group(['middleware' => ['auth']], function () {
     //User Routes
     Route::get('user/records', 'UserController@records')->name('user_records');
     //Route::get('user/machine-code', 'UserController@getMachineCode')->name('getMachineCode');
-    Route::get('/customer', 'UserController@getCustomer')->name('customers');
+    //Route::get('/customer', 'UserController@getCustomer')->name('customers');
     Route::post('user/create-machine', 'UserController@postCreateMachine')->name('user_machine_create');
     Route::get('user/update-machine/{num}', 'UserController@getUpdateMachine')->name('user_machine_get');
     Route::post('user/machine-update', 'UserController@postUpdateMachine')->name('user_machine_update');
     Route::post('user/delete-machine', 'UserController@postDeleteMachine')->name('user_machine_delete');
+
+    Route::get('/generate-code', 'UserController@userMachineCodes')->name('user_machine_codes');
     Route::post('user/machine-generate-code', 'UserController@postMachineGenerateCode')->name('user_machine_generate_code');
     Route::resource('user', 'UserController');
 
@@ -48,6 +50,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['admin']], function () {
         Route::get('sheet/records', 'SheetController@records')->name('sheet_records');
         Route::resource('sheet', 'SheetController');
+
+        Route::get('customer/records', 'CustomerController@records')->name('customer_records');
+        Route::get('customer/detail/{num}', 'CustomerController@getDetail')->name('customer_detail');
+        Route::resource('customer', 'CustomerController');
 
         Route::get('unit/records', 'UnitController@records')->name('unit_records');
         Route::resource('unit', 'UnitController');

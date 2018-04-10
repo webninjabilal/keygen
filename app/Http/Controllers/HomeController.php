@@ -39,10 +39,10 @@ class HomeController extends Controller
     public function my_account()
     {
         $user = Auth::user();
-        /*$machines = $user->machine()->paginate(25);*/
-        $machines           = $this->company->machine()->whereIn('id', $user->machine_user()->pluck('machine_id')->toArray());
+        $customer           = $user->customer;
+        $machines           = $this->company->machine()->whereIn('id', $customer->machine()->pluck('machine_id')->toArray());
         $machine_list       = $machines->pluck('nick_name', 'id')->toArray();
-        $user_machine_codes = MachineUserCode::whereIn('machine_user_id', $user->machine_user()->pluck('id')->toArray())->orderBy('created_at', 'desc')->paginate(25);
+        $user_machine_codes = MachineUserCode::whereIn('machine_user_id', $customer->machine()->pluck('id')->toArray())->orderBy('created_at', 'desc')->where('created_by', $user->id)->paginate(25);
         $sheets             = $this->company->sheet()->orderBy('id', 'desc')->pluck('title', 'id')->toArray();
         $orders             = $user->unit_order()->paginate(25);
         return view('user.my-account', compact('user', 'user_machine_codes', 'sheets', 'orders', 'machine_list'));

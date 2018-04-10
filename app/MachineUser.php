@@ -16,14 +16,14 @@ class MachineUser extends Model
     protected $table = 'machine_users';
 
     protected $fillable = [
-        'user_id',
+        'customer_id',
         'machine_id',
         'status',
     ];
 
-    public function user()
+    public function customer()
     {
-        return $this->belongsTo('App\User', 'user_id');
+        return $this->belongsTo('App\Customer', 'customer_id');
     }
 
     public function machine()

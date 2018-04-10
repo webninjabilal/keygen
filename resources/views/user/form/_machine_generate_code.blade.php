@@ -11,6 +11,6 @@
     {!! Form::number('uses' , null , ['id' => 'uses','class' => 'form-control','placeholder' => '10', 'maxlength' => '3','required'=>'true']) !!}
 </div>
 <div class="form-group">
-    {!! Form::label('used_date','Used Date *') !!}
+    {!! Form::label('used_date','Machine Date *') !!}
     {!! Form::text('used_date' , date('m/d/Y'), ['id' => 'used_date','class' => 'form-control date','placeholder' => date('m/d/Y'),'readonly' => 'readonly','required'=>'true']) !!}
 </div>

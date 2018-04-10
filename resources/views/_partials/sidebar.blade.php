@@ -15,7 +15,7 @@
                 </li>
                 <li class="{{ (Request::is('user*')) ? ' active' : '' }}">
                     <a href="{{ route('user.index') }}"><i class="fa fa-user" aria-hidden="true"></i>
-                        <span class="nav-label"> Users </span>
+                        <span class="nav-label"> Admins </span>
                     </a>
                 </li>
                 <!-- Comment this section as Raffy wants -->
@@ -41,11 +41,21 @@
                         <i class="fa fa-user"></i> My Account
                     </a>
                 </li>
-                <li class="{{ (Request::is('purchase-unit*')) ? ' active' : '' }}">
+                <li class="{{ (Request::is('generate-code')) ? ' active' : '' }}">
+                    <a href="{{ url('generate-code') }}">
+                        Codes
+                    </a>
+                </li>
+                <li class="{{ (Request::is('user')) ? ' active' : '' }}">
+                    <a href="{{ url('user') }}">
+                        <i class="fa fa-user"></i> Users
+                    </a>
+                </li>
+                {{--<li class="{{ (Request::is('purchase-unit*')) ? ' active' : '' }}">
                     <a href="{{ url('purchase-unit') }}"><i class="fa fa-gear" aria-hidden="true"></i>
                         <span class="nav-label"> Purchase Units </span>
                     </a>
-                </li>
+                </li>--}}
             @endif
         </ul>
 

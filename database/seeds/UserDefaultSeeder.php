@@ -26,9 +26,7 @@ class UserDefaultSeeder extends Seeder
             'email'         => 'rafferty@studio98.com',
             'password'      => bcrypt('admin1234'),
             'phone'         => '123456',
-            'gender'        => 'Male',
-            'user_name'     => 'ahmad',
-            'is_admin'      => 1,
+            'user_name'     => 'raffy',
         ]);
         $company->assignContact($user,[]);
         $user->assignRole(1);
