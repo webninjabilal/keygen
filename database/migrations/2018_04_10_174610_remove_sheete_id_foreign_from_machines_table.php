@@ -18,7 +18,7 @@ class RemoveSheeteIdForeignFromMachinesTable extends Migration
         if(Schema::hasTable($this->table)) {
             Schema::table($this->table, function (Blueprint $table) {
                 $table->dropForeign('machines_sheet_id_foreign');
-                DB::statement("ALTER TABLE `machines` CHANGE `sheet_id` `sheet_id` INT(10) UNSIGNED NOT NULL DEFAULT '0';");
+                //DB::statement("ALTER TABLE `machines` CHANGE `sheet_id` `sheet_id` INT(10) UNSIGNED NOT NULL DEFAULT '0';");
                 DB::statement("ALTER TABLE `machines` CHANGE `sheet_id` `sheet_id` INT(10) NOT NULL DEFAULT '0';");
             });
         }
