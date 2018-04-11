@@ -80,8 +80,10 @@
                                             @foreach($customer_machines AS $customer_machine)
                                                 @if(isset($customer_machine->machine->nick_name))
                                                     <div class="panel-body">
-                                                        <h3>{{ $customer_machine->machine->nick_name }}</h3>
-                                                        @include('customer.machine_serial')
+                                                        <div class="row">
+                                                            <h3>{{ $customer_machine->machine->nick_name }}</h3>
+                                                            @include('customer.machine_serial')
+                                                        </div>
                                                     </div>
                                                 @endif
                                             </div>
