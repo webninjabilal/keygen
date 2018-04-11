@@ -19,7 +19,6 @@
                         @else
                             <a href="javascript:void(0)" class="btn btn-primary allow_generate_code">Allow Generate Code</a>
                         @endif
-
                     </td>
                 </tr>
             @endforeach

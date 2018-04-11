@@ -140,6 +140,12 @@ class User extends Authenticatable
         return $this->belongsTo('App\Customer', 'customer_id');
     }
 
+    public function log()
+    {
+        return $this->hasMany('App\Log','user_id');
+    }
+
+
 
 
     public function unit_order() {

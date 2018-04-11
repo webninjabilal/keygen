@@ -19,7 +19,8 @@ class MachineUserCode extends Model
         'uses',
         'code',
         'created_by',
-        'machine_id'
+        'machine_id',
+        'block_serial_number'
     ];
 
     public function machine_user()

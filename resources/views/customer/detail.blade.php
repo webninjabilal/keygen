@@ -32,6 +32,14 @@
                                         <li>
                                             <a  data-toggle="tab" data-id="my-machines" href="#tab-machines">Machine Type</a>
                                         </li>
+
+                                        @if(count($customer_machines) > 0)
+                                            @foreach($customer_machines AS $customer_machine)
+                                                <li>
+                                                    <a  data-toggle="tab" data-id="my-machines" href="#tab-{{ str_slug($customer_machine->machine->nick_name) }}">{{ $customer_machine->machine->nick_name }}</a>
+                                                </li>
+                                            @endforeach
+                                        @endif
                                     </ul>
                                     <div class="tab-content">
                                         <div id="tab-codes" class="tab-pane">
@@ -67,6 +75,18 @@
                                                 @include('customer.machine')
                                             </div>
                                         </div>
+
+                                        @if(count($customer_machines) > 0)
+                                            @foreach($customer_machines AS $customer_machine)
+                                                @if(isset($customer_machine->machine->nick_name))
+                                                    <div id="tab-{{ str_slug($customer_machine->machine->nick_name) }}" class="tab-pane">
+                                                        <div class="panel-body">
+                                                            @include('customer.machine_serial')
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        @endif
                                     </div>
                             </div>
                         </div>
@@ -149,6 +169,19 @@
                 }
             });
 
+            $('.allow_serial_generate_code').on('click', function () {
+                if(confirm('Are you sure, you want to allow users to generate code for that serial number ?')) {
+                    var customerMachineCodeId = $(this).closest('tr').data('id');
+                    changeMachineSerialBlock(customerMachineCodeId, 0);
+                }
+            });
+            $('.disable_serial_generate_code').on('click', function () {
+                if(confirm('Are you sure, you want to block users to generate code for that serial number  ?')) {
+                    var customerMachineCodeId = $(this).closest('tr').data('id');
+                    changeMachineSerialBlock(customerMachineCodeId, 1);
+                }
+            });
+
             $('.machine_credits').focus(function() {
                 var value = $(this).val();
                 if(value == 'NR') {
@@ -165,6 +198,18 @@
                 trigerUpdateValues(this);
             });
         });
+
+        function changeMachineSerialBlock(customerMachineCodeId, status) {
+            if(status != '' || status == 0) {
+                $.ajax({
+                    method: 'POST',
+                    url: base_url+'/customer/machine-block-serial/{{ $customer->id }}',
+                    data: 'machine_user_code_id='+customerMachineCodeId+'&allow_generate_code='+status+'&_token='+csrf_token
+                }).done(function(response) {
+                    location.reload();
+                });
+            }
+        }
 
         function changeMachineBlock(customerMachineId, status) {
             if(status != '') {

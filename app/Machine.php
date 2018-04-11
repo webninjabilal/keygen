@@ -88,6 +88,12 @@ class Machine extends Model
         $random_numbers = nl2br($this->random_numbers);
         $random_numbers = explode('<br />',$random_numbers);
         //$random_numbers = (!empty($random_numbers)) ? explode(',', $random_numbers) : [];
+
+        $checkBlockSerial = MachineUserCode::where('machine_id', $this->id)->where('serial_number',$serial_number )->where('block_serial_number', 1)->first();
+        if($checkBlockSerial) {
+            return false;
+        }
+
         if(count($random_numbers) > 0) {
             $used_date_explode = explode('-', $used_date);
             

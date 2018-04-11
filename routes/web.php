@@ -55,6 +55,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('customer/detail/{num}', 'CustomerController@getDetail')->name('customer_detail');
         Route::post('customer/update-credits/{num}', 'CustomerController@postUpdateMachineCredits')->name('customer_update_machine_credits');
         Route::post('customer/machine-status/{num}', 'CustomerController@postMachineAllowCode')->name('customer_machine_allow_code');
+        Route::post('customer/machine-block-serial/{num}', 'CustomerController@postMachineAllowSerialGenerateCode')->name('customer_machine_allow_code');
         Route::resource('customer', 'CustomerController');
 
         Route::get('unit/records', 'UnitController@records')->name('unit_records');

@@ -366,7 +366,7 @@ class UserController extends Controller
             $machine_code = $machine->generate_code($used_date, $serial_number, $uses);
             if(!$machine_code) {
                 flash()->error('Code is not generated');
-                return json_encode(['success' => false, 'errors' => 'Code is not generated, please try it again with different values']);
+                return json_encode(['success' => false, 'errors' => 'Code is not generated, please try it again with different serial number']);
             }
             if($machine_code and !empty($machine_code)) {
                 $user_machine->code()->create([

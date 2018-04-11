@@ -55,6 +55,13 @@ class CustomerController extends Controller
 
             $customer_machine = $customer->machine()->where('id', $customer_machine_id)->first();
             if($customer_machine) {
+
+                $this->user->log()->create([
+                    'nature' => 'machine_user_credits',
+                    'object_id' => $customer_machine->id,
+                    'detail' => serialize($customer_machine->toArray()),
+                ]);
+
                 $customer_machine->update(['credits' => $value]);
                 return json_encode(['success' => true]);
             }
@@ -71,6 +78,22 @@ class CustomerController extends Controller
             $customer_machine = $customer->machine()->where('id', $customer_machine_id)->first();
             if($customer_machine) {
                 $customer_machine->update(['allow_generate_code' => $allow_generate_code]);
+                return json_encode(['success' => true]);
+            }
+        }
+        return json_encode(['success' => false]);
+    }
+
+    public function postMachineAllowSerialGenerateCode(Request $request, $customer_id)
+    {
+        $customer = $this->company->customer()->where('id', $customer_id)->first();
+        if($customer) {
+            $machine_user_code_id    = $request->input('machine_user_code_id');
+            $allow_generate_code    = $request->input('allow_generate_code');
+
+            $customer_machine_code = MachineUserCode::where('id', $machine_user_code_id)->first();
+            if($customer_machine_code) {
+                $customer_machine_code->update(['block_serial_number' => $allow_generate_code]);
                 return json_encode(['success' => true]);
             }
         }
