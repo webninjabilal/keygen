@@ -77,17 +77,20 @@
 
                                         @if(count($customer_machines) > 0)
                                             <div id="tab-machines" class="tab-pane">
-                                            @foreach($customer_machines AS $customer_machine)
-                                                @if(isset($customer_machine->machine->nick_name))
-                                                    <div class="panel-body">
-                                                        <div class="row">
-                                                            <h3>{{ $customer_machine->machine->nick_name }}</h3>
-                                                            @include('customer.machine_serial')
-                                                        </div>
-                                                    </div>
-                                                @endif
+                                                <div class="panel-body">
+                                                @foreach($customer_machines AS $customer_machine)
+                                                    @if(isset($customer_machine->machine->nick_name))
+
+                                                            <div class="row">
+                                                                <h3>{{ $customer_machine->machine->nick_name }}</h3>
+                                                                @include('customer.machine_serial')
+                                                            </div>
+
+                                                    @endif
+                                                @endforeach
+                                                </div>
                                             </div>
-                                            @endforeach
+
                                         @endif
                                     </div>
                             </div>
