@@ -28,3 +28,15 @@
 .pointer_view{
     cursor: pointer;
 }
+
+#machine_listing input[type=text] {
+    background: transparent;
+    border: none;
+    padding: 4px;
+    text-align: center;
+    width: 150px;
+}
+#machine_listing input[type=text]:focus {
+    background: #ffffff;
+    border: 1px solid #cccccc;
+}

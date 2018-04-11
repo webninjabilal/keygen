@@ -39,8 +39,42 @@ class CustomerController extends Controller
                 $inner->orWhereIn('machine_user_id', $customer->machine()->active()->pluck('id')->toArray());
                 $inner->orWhereIn('created_by', $customer->user()->pluck('id')->toArray());
             })->orderBy('created_at', 'desc')->paginate(25);
-            return view('customer.detail', compact('customer', 'user_machine_codes', 'is_customer', 'is_user'));
+
+            $customer_machines = $customer->machine()->active()->get();
+            return view('customer.detail', compact('customer', 'user_machine_codes', 'is_customer', 'is_user', 'customer_machines'));
         }
+    }
+
+
+    public function postUpdateMachineCredits(Request $request, $customer_id)
+    {
+        $customer = $this->company->customer()->where('id', $customer_id)->first();
+        if($customer) {
+            $customer_machine_id    = $request->input('value_id');
+            $value                  = $request->input('value');
+
+            $customer_machine = $customer->machine()->where('id', $customer_machine_id)->first();
+            if($customer_machine) {
+                $customer_machine->update(['credits' => $value]);
+                return json_encode(['success' => true]);
+            }
+        }
+        return json_encode(['success' => false]);
+    }
+    public function postMachineAllowCode(Request $request, $customer_id)
+    {
+        $customer = $this->company->customer()->where('id', $customer_id)->first();
+        if($customer) {
+            $customer_machine_id    = $request->input('customer_machine_id');
+            $allow_generate_code    = $request->input('allow_generate_code');
+
+            $customer_machine = $customer->machine()->where('id', $customer_machine_id)->first();
+            if($customer_machine) {
+                $customer_machine->update(['allow_generate_code' => $allow_generate_code]);
+                return json_encode(['success' => true]);
+            }
+        }
+        return json_encode(['success' => false]);
     }
     /**
      * Show the form for creating a new resource.

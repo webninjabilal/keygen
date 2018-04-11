@@ -3,31 +3,24 @@
         <thead>
         <tr>
             <th>Machine Name</th>
-            <th>Generated User</th>
-            <th>Serial</th>
-            <th>Uses</th>
-            <th>Machine Date</th>
-            <th>Generated Code</th>
-            <th>Generated at</th>
+            <th>Credit Pool</th>
+            <th>Action</th>
         </tr>
         </thead>
-        <tbody>
-        @if(count($user_machine_codes) > 0)
-            @foreach($user_machine_codes AS $user_machine_code)
-                <tr class="machine_row" data-id="{{ $user_machine_code->id }}">
+        <tbody id="machine_listing">
+        @if(count($customer_machines) > 0)
+            @foreach($customer_machines AS $customer_machine)
+                <tr data-id="{{ $customer_machine->id }}">
+                    <td>{{ ($customer_machine->machine->nick_name) ? $customer_machine->machine->nick_name : 'Machine has deleted' }}</td>
+                    <td><input type="text" class="machine_credits" name="machine_credits[]" value="{{ $customer_machine->credits }}"></td>
                     <td>
-                        @if(isset($user_machine_code->machine_user->machine->nick_name))
-                            {{ $user_machine_code->machine_user->machine->nick_name }}
-                        @elseif(isset($user_machine_code->machine->nick_name))
-                            {{ $user_machine_code->machine->nick_name }}
+                        @if($customer_machine->allow_generate_code == 1)
+                            <a href="javascript:void(0)" class="btn btn-primary disable_generate_code">Block Generate Code</a>
+                        @else
+                            <a href="javascript:void(0)" class="btn btn-primary allow_generate_code">Allow Generate Code</a>
                         @endif
+
                     </td>
-                    <td>{{ (isset($user_machine_code->created_user->full_name)) ? $user_machine_code->created_user->full_name : ''  }}</td>
-                    <td>{{ $user_machine_code->serial_number }}</td>
-                    <td>{{ $user_machine_code->uses }}</td>
-                    <td>{{ (!empty($user_machine_code->used_date)) ? \Carbon\Carbon::createFromFormat('Y-m-d', $user_machine_code->used_date)->format('m/d/Y') : ''  }}</td>
-                    <td>{{ $user_machine_code->code }}</td>
-                    <td>{{ $user_machine_code->created_at->format('m/d/Y h:i:s A') }}</td>
                 </tr>
             @endforeach
         @endif

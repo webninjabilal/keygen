@@ -24,7 +24,7 @@
                         <table id="machine_list" class="table table-striped table-bordered table-hover" >
                             <thead>
                                 <tr>
-                                    <th>Nick Name</th>
+                                    <th>Name</th>
                                     <th>Prefix</th>
                                    {{-- <th>Type</th>--}}
                                     {{--<th>Sheet</th>--}}

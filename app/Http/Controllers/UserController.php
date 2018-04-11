@@ -356,6 +356,13 @@ class UserController extends Controller
         $machine        = $this->company->machine()->where('id', $machine_id)->first();
         $user_machine   = $customer->machine()->where('machine_id', $machine_id)->first();
         if($machine and $user_machine) {
+
+            if($user_machine->allow_generate_code != 1) {
+                return json_encode(['success' => false, 'errors' => 'Sorry, Machine has stopped to generate the code.']);
+            }
+            if($uses > $user_machine->credits) {
+                return json_encode(['success' => false, 'errors' => 'You don’t have enough Use Credits to generate this code. Please contact Erchonia']);
+            }
             $machine_code = $machine->generate_code($used_date, $serial_number, $uses);
             if(!$machine_code) {
                 flash()->error('Code is not generated');
@@ -371,6 +378,10 @@ class UserController extends Controller
                     'created_by'    => $this->user->id,
                     'machine_id'    => $machine->id
                 ]);
+
+                $user_machine->credits = $user_machine->credits - $uses;
+                $user_machine->update();
+
                 flash()->success('Code is generated successfully.');
                 return json_encode(['success' => true]);
                 //$checkCodeAlready = $user_machine->code()->where('code', $machine_code)->first();

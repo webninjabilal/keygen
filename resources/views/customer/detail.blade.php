@@ -29,11 +29,14 @@
                                         <li class="active">
                                             <a  data-toggle="tab" data-id="my-users" href="#tab-users">Users</a>
                                         </li>
+                                        <li>
+                                            <a  data-toggle="tab" data-id="my-machines" href="#tab-machines">Machine Type</a>
+                                        </li>
                                     </ul>
                                     <div class="tab-content">
                                         <div id="tab-codes" class="tab-pane">
                                             <div class="panel-body">
-                                                @include('customer.machine')
+                                                @include('customer.machine_code')
                                             </div>
                                         </div>
                                         <div id="tab-users" class="tab-pane active">
@@ -46,16 +49,22 @@
                                                 <div class="clearfix"></div>
                                                 <table id="user_list" class="table table-striped table-bordered table-hover" style="width: 100%;" >
                                                     <thead>
-                                                    <tr>
-                                                        <th>First Name</th>
-                                                        <th>Last Name</th>
-                                                        <th>Email Address</th>
-                                                        <th>Type</th>
-                                                        <th>Status</th>
-                                                        <th>Action</th>
-                                                    </tr>
+                                                        <tr>
+                                                            <th>First Name</th>
+                                                            <th>Last Name</th>
+                                                            <th>Email Address</th>
+                                                            <th>Type</th>
+                                                            <th>Status</th>
+                                                            <th>Action</th>
+                                                        </tr>
                                                     </thead>
                                                 </table>
+                                            </div>
+                                        </div>
+
+                                        <div id="tab-machines" class="tab-pane">
+                                            <div class="panel-body">
+                                                @include('customer.machine')
                                             </div>
                                         </div>
                                     </div>
@@ -126,7 +135,64 @@
                 hasShow = hasShow.replace('tab-','');
                 window.location.hash = hasShow;
             });
+
+            $('.allow_generate_code').on('click', function () {
+                if(confirm('Are you sure, you want to allow users to generate code for that machine ?')) {
+                    var customerMachineId = $(this).closest('tr').data('id');
+                    changeMachineBlock(customerMachineId, 1);
+                }
+            });
+            $('.disable_generate_code').on('click', function () {
+                if(confirm('Are you sure, you want to block users to generate code for that machine ?')) {
+                    var customerMachineId = $(this).closest('tr').data('id');
+                    changeMachineBlock(customerMachineId, 2);
+                }
+            });
+
+            $('.machine_credits').focus(function() {
+                var value = $(this).val();
+                if(value == 'NR') {
+                    $(this).select();
+                }
+            } );
+            $('.machine_credits').keypress(function(event) {
+                var code = (event.keyCode ? event.keyCode : event.which);
+                if (code == 13) {
+                    trigerUpdateValues(this);
+                }
+            });
+            $('.machine_credits').change(function() {
+                trigerUpdateValues(this);
+            });
         });
+
+        function changeMachineBlock(customerMachineId, status) {
+            if(status != '') {
+                $.ajax({
+                    method: 'POST',
+                    url: base_url+'/customer/machine-status/{{ $customer->id }}',
+                    data: 'customer_machine_id='+customerMachineId+'&allow_generate_code='+status+'&_token='+csrf_token
+                }).done(function(response) {
+                   location.reload();
+                });
+            }
+        }
+
+        function trigerUpdateValues(element) {
+            var value = $(element).val();
+            var value_id = $(element).closest('tr').data('id');
+            $.ajax({
+                method: 'POST',
+                url: base_url+'/customer/update-credits/{{ $customer->id }}',
+                data: 'value='+value+'&value_id='+value_id+'&_token='+csrf_token
+            }).done(function(response) {
+                if(response.success) {
+                    toastrShow('Credits are added successfully.', 'Success');
+                } else {
+
+                }
+            });
+        }
 
     </script>
     @include('user._basic_script')

@@ -19,6 +19,8 @@ class MachineUser extends Model
         'customer_id',
         'machine_id',
         'status',
+        'credits',
+        'allow_generate_code'
     ];
 
     public function customer()
