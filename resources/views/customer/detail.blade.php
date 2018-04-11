@@ -37,7 +37,6 @@
                                             <li>
                                                 <a  data-toggle="tab" data-id="my-machines" href="#tab-machines">Machines</a>
                                             </li>
-
                                         @endif
                                     </ul>
                                     <div class="tab-content">
@@ -90,7 +89,6 @@
                                                 @endforeach
                                                 </div>
                                             </div>
-
                                         @endif
                                     </div>
                             </div>

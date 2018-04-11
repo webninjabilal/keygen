@@ -63,6 +63,11 @@ class CustomerController extends Controller
                 ]);
 
                 $customer_machine->update(['credits' => $value]);
+
+                if($customer_machine->credits > 200) {
+                    $customer_machine->notification_email = 0;
+                    $customer_machine->update();
+                }
                 return json_encode(['success' => true]);
             }
         }

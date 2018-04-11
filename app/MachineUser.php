@@ -20,7 +20,8 @@ class MachineUser extends Model
         'machine_id',
         'status',
         'credits',
-        'allow_generate_code'
+        'allow_generate_code',
+        'notification_email'
     ];
 
     public function customer()
