@@ -30,15 +30,14 @@
                                             <a  data-toggle="tab" data-id="my-users" href="#tab-users">Users</a>
                                         </li>
                                         <li>
-                                            <a  data-toggle="tab" data-id="my-machines" href="#tab-machines">Machine Type</a>
+                                            <a  data-toggle="tab" data-id="my-machine-type" href="#tab-machine-type">Machine Type</a>
                                         </li>
 
                                         @if(count($customer_machines) > 0)
-                                            @foreach($customer_machines AS $customer_machine)
-                                                <li>
-                                                    <a  data-toggle="tab" data-id="my-machines" href="#tab-{{ str_slug($customer_machine->machine->nick_name) }}">{{ $customer_machine->machine->nick_name }}</a>
-                                                </li>
-                                            @endforeach
+                                            <li>
+                                                <a  data-toggle="tab" data-id="my-machines" href="#tab-machines">Machines</a>
+                                            </li>
+
                                         @endif
                                     </ul>
                                     <div class="tab-content">
@@ -70,21 +69,22 @@
                                             </div>
                                         </div>
 
-                                        <div id="tab-machines" class="tab-pane">
+                                        <div id="tab-machine-type" class="tab-pane">
                                             <div class="panel-body">
                                                 @include('customer.machine')
                                             </div>
                                         </div>
 
                                         @if(count($customer_machines) > 0)
+                                            <div id="tab-machines" class="tab-pane">
                                             @foreach($customer_machines AS $customer_machine)
                                                 @if(isset($customer_machine->machine->nick_name))
-                                                    <div id="tab-{{ str_slug($customer_machine->machine->nick_name) }}" class="tab-pane">
-                                                        <div class="panel-body">
-                                                            @include('customer.machine_serial')
-                                                        </div>
+                                                    <div class="panel-body">
+                                                        <h3>{{ $customer_machine->machine->nick_name }}</h3>
+                                                        @include('customer.machine_serial')
                                                     </div>
                                                 @endif
+                                            </div>
                                             @endforeach
                                         @endif
                                     </div>
@@ -231,11 +231,7 @@
                 url: base_url+'/customer/update-credits/{{ $customer->id }}',
                 data: 'value='+value+'&value_id='+value_id+'&_token='+csrf_token
             }).done(function(response) {
-                if(response.success) {
-                    toastrShow('Credits are added successfully.', 'Success');
-                } else {
-
-                }
+                toastrShow('Credits are added successfully.', 'Success');
             });
         }
 

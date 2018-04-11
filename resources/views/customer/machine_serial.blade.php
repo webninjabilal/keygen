@@ -19,9 +19,9 @@ $user_generated_codes = (array_unique($user_generated_codes));
                         <?php $checkSerial =  $customer_machine->code()->where('id', $id)->first(); ?>
                         @if($checkSerial)
                             @if($checkSerial->block_serial_number == 1)
-                                <a href="javascript:void(0)" class="btn btn-primary allow_serial_generate_code">Allow Serial To Generate Code</a>
+                                <a href="javascript:void(0)" class="btn btn-primary allow_serial_generate_code">Allow</a>
                             @else
-                                <a href="javascript:void(0)" class="btn btn-primary disable_serial_generate_code">Block Serial To Generate Code</a>
+                                <a href="javascript:void(0)" class="btn btn-primary disable_serial_generate_code">Block</a>
                             @endif
                         @endif
                     </td>
