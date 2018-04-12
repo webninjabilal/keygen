@@ -49,9 +49,13 @@
                                             <div class="panel-body">
                                                 @include('flash::message')
                                                 <div class="clearfix"></div>
+                                                <div class="col-sm-2 pull-right" style="text-align: right;">
+                                                    <a href="javascript:void(0)" class="btn btn-success export_filter_user" style="margin-right: 10px"><i class="fa fa-file-excel-o"></i> Export Data</a>
+                                                </div>
                                                 <div class="pull-right">
                                                     <a class="btn btn-primary" href="javascript:void(0);" data-toggle="modal" data-target="#create_user"><i class="fa fa-plus"></i> Add User</a>
                                                 </div>
+
                                                 <div class="clearfix"></div>
                                                 <table id="user_list" class="table table-striped table-bordered table-hover" style="width: 100%;" >
                                                     <thead>
@@ -77,6 +81,12 @@
                                         @if(count($customer_machines) > 0)
                                             <div id="tab-machines" class="tab-pane">
                                                 <div class="panel-body">
+                                                <div class="row">
+                                                    <div class="col-sm-3 pull-right" style="text-align: right;">
+                                                        <a href="javascript:void(0)" class="btn btn-success export_filter_btn" data-type="machine-serial" style="margin-right: 10px"><i class="fa fa-file-excel-o"></i> Export Machine Serials</a>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
                                                 @foreach($customer_machines AS $customer_machine)
                                                     @if(isset($customer_machine->machine->nick_name))
 
@@ -199,6 +209,15 @@
             });
             $('.machine_credits').change(function() {
                 trigerUpdateValues(this);
+            });
+
+            $('.export_filter_btn').unbind('click');
+            $('.export_filter_btn').click(function () {
+
+                var export_type = $(this).data('type');
+                if(export_type != '') {
+                    window.location.href = '{{ route('customer_export_custom_data', [$customer->id]) }}?type='+export_type;
+                }
             });
         });
 

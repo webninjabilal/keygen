@@ -1,3 +1,7 @@
+<div class="col-sm-3 pull-right" style="text-align: right;">
+    <a href="javascript:void(0)" class="btn btn-success export_filter_btn" data-type="machine-type" style="margin-right: 10px"><i class="fa fa-file-excel-o"></i> Export Machine Type</a>
+</div>
+<div class="clearfix"></div>
 <div class="table-responsive">
     <table id="" class="table table-striped table-bordered table-hover" >
         <thead>

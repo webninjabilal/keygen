@@ -1,3 +1,7 @@
+<div class="col-sm-2 pull-right" style="text-align: right;">
+    <a href="javascript:void(0)" class="btn btn-success export_filter_btn" data-type="codes" style="margin-right: 10px"><i class="fa fa-file-excel-o"></i> Export Codes</a>
+</div>
+<div class="clearfix"></div>
 <div class="table-responsive">
     <table id="" class="table table-striped table-bordered table-hover" >
         <thead>

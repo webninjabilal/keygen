@@ -14,12 +14,31 @@
             ajax : {
                 url: '{{ route('user_records') }}',
                 data: function(d){
+                    var get = 'filter_type='+filter_type;
                     d.columns[0].search.value = filter_type;
                     @if(isset($customer) and $customer->id > 0)
                         d.columns[1].search.value = '{{ $customer->id }}';
+                        get += '&customer_id='+'{{ $customer->id }}';
                     @endif
+                    if(d.columns[2].search.value == 'yes') {
+
+                        get += '&search='+d.search.value;
+                        var link = $("<a />", {
+                            href: '{{ route('user_export_records') }}?'+get,
+                            target: '_blank',
+                        });
+                        $('body').prepend(link);
+                        $("body a")[0].click();
+                        location.reload();
+                    }
                 }
             },
+        });
+
+        $('.export_filter_user').unbind();
+        $(".export_filter_user").on('click', function () {
+            processBtnDisable($(this));
+            oTable.fnFilter('yes', 2, false);
         });
     });
     function saveUser() {

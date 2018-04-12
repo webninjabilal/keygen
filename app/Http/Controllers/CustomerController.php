@@ -6,6 +6,7 @@ use App\Company;
 use App\Customer;
 use App\Http\Requests\CustomerRequest;
 use App\MachineUserCode;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -317,6 +318,102 @@ class CustomerController extends Controller
                     $customer->machine_credits,
                 ];
                 fputcsv($fp, $data);
+            }
+        }
+    }
+
+    public function getExportCustomData(Request $request, $customer_id)
+    {
+        $customer = $this->company->customer()->where('id', $customer_id)->first();
+        if($customer) {
+            $type = $request->input('type');
+            header( 'Content-Type: text/csv' );
+            header( 'Content-Disposition: attachment;filename='.time().'customer-filter-report.csv');
+            $fp = fopen('php://output', 'w');
+
+
+            if($type == 'codes') {
+
+                fputcsv($fp, [$customer->name.' Export Codes at '.date('m/d/Y h:i:s A')]);
+                fputcsv($fp, ['']);
+                fputcsv($fp, ['Machine Name', 'Generated User', 'Serial', 'Uses', 'Machine Date', 'Generated Code', 'Generated at']);
+
+                $user_machine_codes = MachineUserCode::where(function ($inner) use ($customer) {
+                    $inner->orWhereIn('machine_user_id', $customer->machine()->active()->pluck('id')->toArray());
+                    $inner->orWhereIn('created_by', $customer->user()->pluck('id')->toArray());
+                })->orderBy('created_at', 'desc')->get();
+
+                if(count($user_machine_codes) > 0) {
+                    foreach($user_machine_codes AS $user_machine_code){
+                        $data =  [];
+                        if(isset($user_machine_code->machine_user->machine->nick_name)){
+                            $data[] = $user_machine_code->machine_user->machine->nick_name;
+                        } elseif(isset($user_machine_code->machine->nick_name)) {
+                            $data[] = $user_machine_code->machine->nick_name;
+                        }
+                        $data[] = (isset($user_machine_code->created_user->full_name)) ? $user_machine_code->created_user->full_name : '';
+                        $data[] = $user_machine_code->serial_number;
+                        $data[] = $user_machine_code->uses;
+                        $data[] = (!empty($user_machine_code->used_date)) ? Carbon::createFromFormat('Y-m-d', $user_machine_code->used_date)->format('m/d/Y') : '';
+                        $data[] = $user_machine_code->code;
+                        $data[] = $user_machine_code->created_at->format('m/d/Y h:i:s A');
+                        fputcsv($fp, $data);
+                    }
+                }
+            }
+
+
+            else if($type == 'machine-serial') {
+
+                fputcsv($fp, [$customer->name.' Export Codes at '.date('m/d/Y h:i:s A')]);
+                fputcsv($fp, ['']);
+                fputcsv($fp, ['Machine Name', 'Serial', 'Status']);
+
+                $customer_machines = $customer->machine()->active()->get();
+                if(count($customer_machines) > 0){
+
+                    foreach ($customer_machines as $customer_machine) {
+                        if(isset($customer_machine->machine->nick_name)){
+                            $user_generated_codes = $customer_machine->code()->orderBy('created_at', 'desc')->pluck('serial_number', 'id')->toArray();
+                            $user_generated_codes = (array_unique($user_generated_codes));
+                            if(count($user_generated_codes) > 0){
+
+                                foreach($user_generated_codes AS $id => $serial_number){
+
+                                    $checkSerial =  $customer_machine->code()->where('id', $id)->first();
+                                    if($checkSerial){
+                                        $data = [
+                                            $customer_machine->machine->nick_name,
+                                            $serial_number,
+                                            ($checkSerial->block_serial_number == 1) ? 'Blocked' : 'Allowed'
+                                        ];
+                                        fputcsv($fp, $data);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            else if($type == 'machine-type') {
+
+                $customer_machines = $customer->machine()->active()->get();
+
+                fputcsv($fp, [$customer->name.' Export Machine Type at '.date('m/d/Y h:i:s A')]);
+                fputcsv($fp, ['']);
+                fputcsv($fp, ['Machine Name', 'Credit Pool', 'Status']);
+
+                if(count($customer_machines) > 0) {
+                    foreach ($customer_machines AS $customer_machine) {
+                        $data = [
+                            (isset($customer_machine->machine->nick_name)) ? $customer_machine->machine->nick_name : '',
+                            $customer_machine->credits,
+                            ($customer_machine->allow_generate_code  == 1) ? 'Allowed' : 'Blocked'
+                        ];
+                        fputcsv($fp, $data);
+                    }
+                }
             }
         }
     }

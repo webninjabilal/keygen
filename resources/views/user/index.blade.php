@@ -26,6 +26,11 @@
                 <div class="ibox float-e-margins">
                     <div class="ibox-content p-md">
                         @include('flash::message')
+                        @if(\Auth::user()->isAdmin())
+                            <div class="col-sm-2 pull-right" style="text-align: right;">
+                                <a href="javascript:void(0)" class="btn btn-success export_filter_user" style="margin-right: 10px"><i class="fa fa-file-excel-o"></i> Export Data</a>
+                            </div>
+                        @endif
                         <div class="clearfix"></div>
                         <table id="user_list" class="table table-striped table-bordered table-hover" >
                             <thead>

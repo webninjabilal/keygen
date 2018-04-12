@@ -312,6 +312,82 @@ class UserController extends Controller
         ];
     }
 
+
+    public function getExportRecords(Request $request)
+    {
+        $search         = $request->input('search');
+        $filter_type    = $request->input('filter_type');
+        $customer_id    = $request->input('customer_id');
+
+        header( 'Content-Type: text/csv' );
+        header( 'Content-Disposition: attachment;filename='.time().'user-filter-report.csv');
+        $fp = fopen('php://output', 'w');
+
+        fputcsv($fp, ['User Filter Report at '.date('m/d/Y h:i:s A')]);
+
+        fputcsv($fp, ['']);
+        fputcsv($fp, ['First Name', 'Last Name', 'Email', 'Type', 'Status']);
+
+
+        $query = User::whereHas('company', function($query) {
+            $query->where('company_id', $this->company->id);
+        })->where('email', '!=', '');
+        if(!$this->user->isAdmin()) {
+            $query->where('created_by', $this->user->id);
+        }
+
+        $role_ids = [];
+        if($filter_type == 'customer') {
+            if(!$this->user->isAdmin()) {
+                $user_role_id = User::getUserRoleId($this->user->id);
+                if($user_role_id) {
+                    $role_ids = [User::getUserRoleId($this->user->id)];
+                }
+            } else {
+                $role_ids = Role::where('name', 'Customer')->pluck('id')->toArray();
+            }
+            $query->whereHas('roles', function($query) use ($role_ids) {
+                $query->whereIn('role_id', $role_ids);
+            });
+
+        } elseif($filter_type == 'admin') {
+            if($this->user->isAdmin()) {
+                $role_ids = Role::where('name', 'Admin')->pluck('id')->toArray();
+                $query->whereHas('roles', function($query) use ($role_ids) {
+                    $query->whereIn('role_id', $role_ids);
+                });
+            }
+        }
+
+        if(!empty($customer_id)) {
+            $query->where('customer_id', $customer_id);
+        }
+
+        if ($search != '') {
+            $query->where(function ($inner) use ($search){
+                $inner->orWhere('first_name', 'like', '%' . $search . '%');
+                $inner->orWhere('last_name', 'like', '%' . $search . '%');
+                $inner->orWhere('email', 'like', '%' . $search . '%');
+                $inner->orWhere('phone', 'like', '%' . $search . '%');
+            });
+        }
+
+
+        $users = $query->orderBy('id', 'DESC')->get();
+        if(count($users) > 0) {
+            foreach ($users as $user) {
+                $data = [
+                    $user->first_name,
+                    $user->last_name,
+                    $user->email,
+                    User::getUserRoleName($user->id),
+                    'Active'
+                ];
+                fputcsv($fp, $data);
+            }
+        }
+    }
+
     private function checkUserName($user_name, $user = false)
     {
         $query = User::where('id', '>', 0);

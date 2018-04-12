@@ -35,6 +35,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     //User Routes
     Route::get('user/records', 'UserController@records')->name('user_records');
+    Route::get('user/export-records', 'UserController@getExportRecords')->name('user_export_records');
     //Route::get('user/machine-code', 'UserController@getMachineCode')->name('getMachineCode');
     //Route::get('/customer', 'UserController@getCustomer')->name('customers');
     Route::post('user/create-machine', 'UserController@postCreateMachine')->name('user_machine_create');
@@ -53,6 +54,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::get('customer/records', 'CustomerController@records')->name('customer_records');
         Route::get('customer/export-records', 'CustomerController@getExportRecords')->name('customer_export_records');
+        Route::get('customer/export-custom-data/{num}', 'CustomerController@getExportCustomData')->name('customer_export_custom_data');
         Route::get('customer/detail/{num}', 'CustomerController@getDetail')->name('customer_detail');
         Route::post('customer/update-credits/{num}', 'CustomerController@postUpdateMachineCredits')->name('customer_update_machine_credits');
         Route::post('customer/machine-status/{num}', 'CustomerController@postMachineAllowCode')->name('customer_machine_allow_code');
