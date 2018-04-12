@@ -218,6 +218,10 @@ class CustomerController extends Controller
 
         $filter = $request->input('columns');
 
+        $order      = $request->input('order');
+        $order_col  = $order[0]['column'];
+        $order_by    = $order[0]['dir'];
+
         $query = $this->company->customer()->where('name', '!=', '')
         ->leftJoin('machine_users', 'machine_users.customer_id', '=', 'customers.id')
         ->leftJoin('machines', 'machines.id', '=', 'machine_users.machine_id');
@@ -229,6 +233,15 @@ class CustomerController extends Controller
             });
         }
         $query->select(\DB::raw('customers.id as id'),'customers.name', 'machines.nick_name as machine_name', 'machine_users.credits as machine_credits');
+
+        /*if($order_col == 0) {
+            $query->orderBy('customers.name', $order_by);
+        } else if($order_col == 1) {
+            $query->orderBy('machines.nick_name', $order_by);
+        } else if($order_col == 2) {
+            $query->orderBy('machine_users.credits', $order_by);
+        }*/
+
         $query->orderBy('customers.id', 'DESC')->orderBy('machine_users.customer_id', 'DESC');
         $total_records = $query->get()->count();
 
