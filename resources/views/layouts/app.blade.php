@@ -13,11 +13,19 @@
     <script>base_url = '{{ url('') }}'</script>
     <script>csrf_token = '{{ csrf_token() }}'</script>
     <script>per_page_show = 25</script>
+    <style>
+        body #page-wrapper{
+            background-image: url({{ asset('images/body_background.png') }});
+        }
+        .navbar-fixed-top, .navbar-static-top{
+            background: transparent;
+        }
+    </style>
 </head>
 <body class="left-navigation">
 <div id="wrapper">
     @include('_partials.sidebar')
-    <div id="page-wrapper" class="gray-bg">
+    <div id="page-wrapper">
 
         <div class="row border-bottom">
             @include('_partials.header')
