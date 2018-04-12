@@ -6,7 +6,7 @@
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="row">
             <div class="col-lg-12">
-                <h2> Purchase Units</h2>
+                <h2 class="page_heading"> Purchase Units</h2>
             </div>
         </div>
     </div>

@@ -2,9 +2,9 @@
 <nav class="navbar-default navbar-static-side" role="navigation">
     <div class="sidebar-collapse">
         <ul class="nav metismenu" id="side-menu">
-            <li class="nav-header" style="padding-left: 0; padding-right: 0; padding-bottom: 15px">
-                <a href="{{ url('') }}" style="padding-left: 8px; padding-right: 0;">
-                    <img src="" style="width: 100%;">
+            <li class="nav-header" style="padding-left: 0; padding-right: 0; padding-bottom: 15px; width: 220px;">
+                <a href="{{ url('/') }}">
+                    <img src="{{ asset('images/logo.png') }}" style="width: 100%;">
                 </a>
             </li>
             @if(Auth::user()->isAdmin())

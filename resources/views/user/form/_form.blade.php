@@ -9,8 +9,8 @@
     </div>
 
     <div class="form-group">
-        {!! Form::label('phone','Phone  *') !!}
-        {!! Form::text('phone' , $user->phone , ['class' => 'form-control','placeholder' => 'Phone ','required'=>'true']) !!}
+        {!! Form::label('phone','Phone ') !!}
+        {!! Form::text('phone' , $user->phone , ['class' => 'form-control','placeholder' => 'Phone ']) !!}
     </div>
     <div class="form-group">
         {!! Form::label('email ','Email  *') !!}

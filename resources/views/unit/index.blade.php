@@ -6,7 +6,7 @@
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="row">
             <div class="col-lg-12">
-                <h2> Units
+                <h2 class="page_heading"> Units
                     <div class="pull-right">
                         <a class="btn btn-primary" href="javascript:void(0);" data-toggle="modal" data-target="#create_unit"><i class="fa fa-plus"></i> Add Unit</a>
                     </div>

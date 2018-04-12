@@ -15,9 +15,9 @@
                     <td><input type="text" class="machine_credits" name="machine_credits[]" value="{{ $customer_machine->credits }}"></td>
                     <td>
                         @if($customer_machine->allow_generate_code == 1)
-                            <a href="javascript:void(0)" class="btn btn-primary disable_generate_code">Block Generate Code</a>
+                            <a href="javascript:void(0)" class="btn btn-primary disable_generate_code">Block</a>
                         @else
-                            <a href="javascript:void(0)" class="btn btn-primary allow_generate_code">Allow Generate Code</a>
+                            <a href="javascript:void(0)" class="btn btn-primary allow_generate_code">Allow</a>
                         @endif
                     </td>
                 </tr>

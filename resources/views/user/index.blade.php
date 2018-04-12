@@ -12,7 +12,7 @@
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="row">
             <div class="col-lg-12">
-                <h2> {{ $user_heading }}
+                <h2 class="page_heading"> {{ $user_heading }}
                     <div class="pull-right">
                         <a class="btn btn-primary" href="javascript:void(0);" data-toggle="modal" data-target="#create_user"><i class="fa fa-plus"></i> Add {{ $user_heading }}</a>
                     </div>

@@ -358,7 +358,7 @@ class UserController extends Controller
         if($machine and $user_machine) {
 
             if($user_machine->allow_generate_code != 1) {
-                return json_encode(['success' => false, 'errors' => 'Sorry, Machine has stopped to generate the code.']);
+                return json_encode(['success' => false, 'errors' => 'Sorry, this Machine isn’t able to generate a code at this time.  Please contact Erchonia']);
             }
             if($uses > $user_machine->credits) {
                 return json_encode(['success' => false, 'errors' => 'You don’t have enough Use Credits to generate this code. Please contact Erchonia']);
@@ -366,7 +366,7 @@ class UserController extends Controller
             $machine_code = $machine->generate_code($used_date, $serial_number, $uses);
             if(!$machine_code) {
                 flash()->error('Code is not generated');
-                return json_encode(['success' => false, 'errors' => 'Code is not generated, please try it again with different serial number']);
+                return json_encode(['success' => false, 'errors' => 'Sorry, this Machine isn’t able to generate a code at this time.  Please contact Erchonia']);
             }
             if($machine_code and !empty($machine_code)) {
                 $user_machine->code()->create([

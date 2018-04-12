@@ -217,27 +217,42 @@ class CustomerController extends Controller
 
         $filter = $request->input('columns');
 
-        $query = $this->company->customer()->where('name', '!=', '');
+        $query = $this->company->customer()->where('name', '!=', '')
+        ->leftJoin('machine_users', 'machine_users.customer_id', '=', 'customers.id')
+        ->leftJoin('machines', 'machines.id', '=', 'machine_users.machine_id');
         if ($search != '') {
             $query->where(function ($inner) use ($search){
-                $inner->orWhere('name', 'like', '%' . $search . '%');
+                $inner->orWhere('customers.name', 'like', '%' . $search . '%');
+                $inner->orWhere('machines.nick_name', 'like', '%' . $search . '%');
+                $inner->orWhere('machine_users.credits', 'like', '%' . $search . '%');
             });
         }
-
-
-        $query->orderBy('id', 'DESC');
-        $total_records = $query->count();
+        $query->select(\DB::raw('customers.id as id'),'customers.name', 'machines.nick_name as machine_name', 'machine_users.credits as machine_credits');
+        $query->orderBy('customers.id', 'DESC')->orderBy('machine_users.customer_id', 'DESC');
+        $total_records = $query->get()->count();
 
         $customers = $query->limit($limit)->offset($start)->get();
         $records = [];
 
-        if($customers) {
+        if(count($customers) > 0) {
+
+            $first_customer = '';
             foreach($customers AS $customer) {
-                $data = [
-                    '<a href="'.route('customer_detail', [$customer->id]).'">'.$customer->name.'</a>',
-                    '<a href="javascript:void(0)" class="btn btn-white btn-sm" onclick="getCustomer(' . $customer->id . ')"><i class="fa fa-pencil"></i> Edit</a>
+
+                $customer_link = '';
+                $action_link = '';
+                if(empty($first_customer) or $first_customer != $customer->id) {
+                    $first_customer = $customer->id;
+                    $customer_link = '<a href="'.route('customer_detail', [$customer->id]).'">'.$customer->name.'</a>';
+                    $action_link = '<a href="javascript:void(0)" class="btn btn-white btn-sm" onclick="getCustomer(' . $customer->id . ')"><i class="fa fa-pencil"></i> Edit</a>
                      <a href="javascript:void(0)" class="btn btn-white btn-sm" onclick="deleteCustomer(' . $customer->id . ')"><i class="fa fa-trash-o"></i> Delete</a>
-                    ',
+                    ';
+                }
+                $data = [
+                    $customer_link,
+                    $customer->machine_name,
+                    $customer->machine_credits,
+                    $action_link
                 ];
                 $records[] = $data;
             }

@@ -6,7 +6,7 @@
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="row">
             <div class="col-lg-12">
-                <h2> Companies
+                <h2 class="page_heading"> Companies
                     <div class="pull-right">
                         <a class="btn btn-primary" href="javascript:void(0);" data-toggle="modal" data-target="#create_company"><i class="fa fa-plus"></i> Add Company</a>
                     </div>

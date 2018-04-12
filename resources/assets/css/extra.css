@@ -1,3 +1,16 @@
+@font-face{
+    font-family:Sensation Bold;
+    src:url('../fonts/Sansation_Bold.ttf');
+}
+@font-face{
+    font-family:Sensation Regular;
+    src:url('../fonts/Sansation_Regular.ttf');
+}
+
+body {
+    font-family: Sensation Regular;
+}
+
 .passwordBox .ibox-content {
     border-radius: 10px;
     -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
@@ -39,4 +52,15 @@
 #machine_listing input[type=text]:focus {
     background: #ffffff;
     border: 1px solid #cccccc;
+}
+
+body nav.navbar-static-side {
+    background: #253746;
+    font-family: Sensation Bold;
+}
+body nav.navbar-static-side li a{
+    font-size: 16px;
+}
+.page_heading{
+    font-family: Sensation Bold;
 }

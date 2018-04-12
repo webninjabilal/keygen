@@ -6,7 +6,7 @@
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="row">
             <div class="col-lg-12">
-                <h2> User Roles
+                <h2 class="page_heading"> User Roles
                     <div class="pull-right">
                         <a class="btn btn-primary" href="javascript:void(0);" data-toggle="modal" data-target="#create_user_role"><i class="fa fa-plus"></i> Add User Role</a>
                     </div>

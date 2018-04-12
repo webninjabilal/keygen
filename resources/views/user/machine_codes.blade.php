@@ -7,7 +7,7 @@
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="row">
             <div class="col-lg-12">
-                <h2> {{ (isset(\Auth::user()->customer->name)) ? \Auth::user()->customer->name : \Auth::user()->full_name }} Codes</h2>
+                <h2 class="page_heading"> {{ (isset(\Auth::user()->customer->name)) ? \Auth::user()->customer->name : \Auth::user()->full_name }} Codes</h2>
             </div>
         </div>
     </div>

@@ -7,7 +7,7 @@
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="row">
             <div class="col-lg-12">
-                <h2> {{ $user->full_name }}
+                <h2 class="page_heading"> {{ $user->full_name }}
                 </h2>
             </div>
         </div>
