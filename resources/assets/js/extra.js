@@ -151,6 +151,7 @@ function reloadAjaxSubmit(parent_id,url,field_name,btn_text) {
         response = response.responseJSON;
         $.each(response.errors, function(i, item) {
             $('#'+parent_id+' #'+i).css('border-color','red');
+            $('#'+parent_id+' #'+i).closest('div').append('<small class="red">'+item+'</small>');
         });
         revertProcessBtnDisable(btn,btn_text);
     });

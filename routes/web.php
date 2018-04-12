@@ -35,7 +35,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     //User Routes
     Route::get('user/records', 'UserController@records')->name('user_records');
-    Route::get('user/export-records', 'UserController@getExportRecords')->name('user_export_records');
     //Route::get('user/machine-code', 'UserController@getMachineCode')->name('getMachineCode');
     //Route::get('/customer', 'UserController@getCustomer')->name('customers');
     Route::post('user/create-machine', 'UserController@postCreateMachine')->name('user_machine_create');
@@ -49,6 +48,9 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     Route::group(['middleware' => ['admin']], function () {
+
+        Route::get('user/export-records', 'UserController@getExportRecords')->name('user_export_records');
+
         Route::get('sheet/records', 'SheetController@records')->name('sheet_records');
         Route::resource('sheet', 'SheetController');
 

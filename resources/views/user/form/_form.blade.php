@@ -1,20 +1,20 @@
 
     <div class="form-group">
         {!! Form::label('first_name','First Name  *') !!}
-        {!! Form::text('first_name' , $user->first_name , ['class' => 'form-control','placeholder' => 'First Name','required'=>'true']) !!}
+        {!! Form::text('first_name' , $user->first_name , ['id' => 'first_name', 'class' => 'form-control','placeholder' => 'First Name','required'=>'true']) !!}
     </div>
     <div class="form-group">
         {!! Form::label('last_name','Last Name *') !!}
-        {!! Form::text('last_name' , $user->last_name , ['class' => 'form-control','placeholder' => 'Last Name ','required'=>'true']) !!}
+        {!! Form::text('last_name' , $user->last_name , ['id' => 'last_name','class' => 'form-control','placeholder' => 'Last Name ','required'=>'true']) !!}
     </div>
 
     <div class="form-group">
         {!! Form::label('phone','Phone ') !!}
-        {!! Form::text('phone' , $user->phone , ['class' => 'form-control','placeholder' => 'Phone ']) !!}
+        {!! Form::text('phone' , $user->phone , ['id' => 'phone','class' => 'form-control','placeholder' => 'Phone ']) !!}
     </div>
     <div class="form-group">
         {!! Form::label('email ','Email  *') !!}
-        {!! Form::text('email' , $user->email , ['class' => 'form-control','placeholder' => 'Email  ','required'=>'true']) !!}
+        {!! Form::text('email' , $user->email , ['id' => 'email','class' => 'form-control','placeholder' => 'Email  ','required'=>'true']) !!}
     </div>
 
 

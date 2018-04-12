@@ -8,9 +8,13 @@
     {!! Form::text('prefix' , $machine->prefix , ['class' => 'form-control','placeholder' => 'Prefix','required'=>'true', 'style' => 'width: 170px;', 'maxlength' => '3']) !!}
 </div>
 <div class="form-group">
+    {!! Form::label('notes','Notes') !!}
+    {!! Form::text('notes' , $machine->notes , ['class' => 'form-control','placeholder' => 'Notes']) !!}
+</div>
+{{--<div class="form-group">
     {!! Form::label('country_id', 'Select Country') !!}
     {!! Form::select('country_id', \App\Country::pluck('name', 'id')->toArray(), $machine->country_id, ['class' => 'form-control', 'placeholder' => 'Select Country']) !!}
-</div>
+</div>--}}
 <div class="form-group">
     {!! Form::label('random_numbers', 'Random Numbers') !!}
     {!! Form::textarea('random_numbers', $machine->random_numbers, ['class' => 'form-control']) !!}

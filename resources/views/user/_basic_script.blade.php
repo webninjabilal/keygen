@@ -79,23 +79,17 @@
     }
 
     function customValidations(parent_id) {
-        var company = $('#'+parent_id+' input[name=company]');
+
         var first_name = $('#'+parent_id+' input[name=first_name]');
         var last_name = $('#'+parent_id+' input[name=last_name]');
         var phone = $('#'+parent_id+' input[name=phone]');
         var email = $('#'+parent_id+' input[name=email]');
 
-        if(company.val() == '') {
-            company.focus();
-            return false;
-        } else if(first_name.val() == '') {
+        if(first_name.val() == '') {
             first_name.focus();
             return false;
         } else if(last_name.val() == '') {
             last_name.focus();
-            return false;
-        } else if(phone.val() == '') {
-            phone.focus();
             return false;
         } else if(email.val() == '') {
             email.focus();

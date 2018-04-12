@@ -31,6 +31,7 @@ class Machine extends Model
         'company_id',
         'country_id',
         'random_numbers',
+        'notes',
     ];
 
     public function user()
