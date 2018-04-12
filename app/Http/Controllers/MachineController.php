@@ -133,7 +133,6 @@ class MachineController extends Controller
             $query->where(function ($inner) use ($search){
                 $inner->orWhere('nick_name', 'like', '%' . $search . '%');
                 $inner->orWhere('prefix', 'like', '%' . $search . '%');
-                $inner->orWhere('serial_number', 'like', '%' . $search . '%');
             });
         }
 
