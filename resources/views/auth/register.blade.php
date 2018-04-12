@@ -77,7 +77,7 @@
         <hr/>
         <div class="row">
             <div class="col-md-12 text-center">
-                © {{ date('Y') }}, KeyGen. All Rights Reserved
+                © {{ date('Y') }}, Erchonia. All Rights Reserved
             </div>
         </div>
     </div>

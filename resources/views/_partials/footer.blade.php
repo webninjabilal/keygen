@@ -10,6 +10,6 @@
 </div>
 <div class="footer">
     <div>
-        &copy; {{ date('Y') }} . All Rights Reserved.
+        &copy; {{ date('Y') }} Erchonia. All Rights Reserved.
     </div>
 </div>

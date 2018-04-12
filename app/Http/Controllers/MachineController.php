@@ -124,6 +124,10 @@ class MachineController extends Controller
 
         $filter = $request->input('columns');
 
+        $order      = $request->input('order');
+        $order_col  = $order[0]['column'];
+        $order_by    = $order[0]['dir'];
+
         $query = $this->company->machine()->where('id', '>', 0);
         if ($search != '') {
             $query->where(function ($inner) use ($search){
@@ -133,7 +137,13 @@ class MachineController extends Controller
             });
         }
 
-
+        if($order_col == 0) {
+            $query->orderBy('nick_name', $order_by);
+        } else if($order_col == 1) {
+            $query->orderBy('prefix', $order_by);
+        } else if($order_col == 2) {
+            $query->orderBy('status', $order_by);
+        }
         $query->orderBy('id', 'DESC');
         $total_records = $query->count();
 

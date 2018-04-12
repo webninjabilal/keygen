@@ -88,7 +88,7 @@
                 processing: true,
                 serverSide: true,
                 pageLength: 25,
-                bSort: false,
+                bSort: true,
                 ajax : "{{ route('machine_records') }}"
             });
         });
