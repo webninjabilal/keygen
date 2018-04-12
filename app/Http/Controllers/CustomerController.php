@@ -264,4 +264,60 @@ class CustomerController extends Controller
             "aaData" => $records,
         ];
     }
+
+    public function getExportRecords(Request $request)
+    {
+
+        $search = $request->input('search');
+        $heading = [
+            'Customer Name',
+            'Machine Type',
+            'Credit Pool',
+        ];
+
+        header( 'Content-Type: text/csv' );
+        header( 'Content-Disposition: attachment;filename='.time().'customer-filter-report.csv');
+        $fp = fopen('php://output', 'w');
+
+        fputcsv($fp, ['Customer Filter Report at '.date('m/d/Y h:i:s A')]);
+        fputcsv($fp, ['']);
+        fputcsv($fp, $heading);
+
+        $query = $this->company->customer()->where('name', '!=', '')
+            ->leftJoin('machine_users', 'machine_users.customer_id', '=', 'customers.id')
+            ->leftJoin('machines', 'machines.id', '=', 'machine_users.machine_id');
+        if ($search != '') {
+            $query->where(function ($inner) use ($search){
+                $inner->orWhere('customers.name', 'like', '%' . $search . '%');
+                $inner->orWhere('machines.nick_name', 'like', '%' . $search . '%');
+                $inner->orWhere('machine_users.credits', 'like', '%' . $search . '%');
+            });
+        }
+        $query->select(\DB::raw('customers.id as id'),'customers.name', 'machines.nick_name as machine_name', 'machine_users.credits as machine_credits');
+        $query->orderBy('customers.id', 'DESC')->orderBy('machine_users.customer_id', 'DESC');
+
+        $total_records = $query->get()->count();
+
+        $customers = $query->get();
+        $records = [];
+
+        if(count($customers) > 0) {
+
+            $first_customer = '';
+            foreach($customers AS $customer) {
+
+                $customer_link = '';
+                if(empty($first_customer) or $first_customer != $customer->id) {
+                    $first_customer = $customer->id;
+                    $customer_link = $customer->name;
+                }
+                $data = [
+                    $customer_link,
+                    $customer->machine_name,
+                    $customer->machine_credits,
+                ];
+                fputcsv($fp, $data);
+            }
+        }
+    }
 }

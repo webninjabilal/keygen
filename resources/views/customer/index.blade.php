@@ -21,6 +21,10 @@
                     <div class="ibox-content p-md">
                         @include('flash::message')
                         <div class="clearfix"></div>
+                        <div class="col-sm-2 pull-right" style="text-align: right;">
+                            <a href="javascript:void(0)" class="btn btn-success export_filter_btn" style="margin-right: 10px"><i class="fa fa-file-excel-o"></i> Export Data</a>
+                        </div>
+                        <div class="clearfix"></div>
                         <table id="customer_list" class="table table-striped table-bordered table-hover" >
                             <thead>
                                 <tr>
@@ -87,7 +91,27 @@
                 serverSide: true,
                 pageLength: 25,
                 bSort: false,
-                ajax : "{{ route('customer_records') }}"
+                ajax : {
+                    url: "{{ route('customer_records') }}",
+                    data: function(d){
+                        if(d.columns[1].search.value == 'yes') {
+
+                            var get = '&search='+d.search.value;
+                            var link = $("<a />", {
+                                href: '{{ route('customer_export_records') }}?'+get,
+                                target: '_blank',
+                            });
+                            $('body').prepend(link);
+                            $("body a")[0].click();
+                            location.reload();
+                        }
+                    },
+                },
+            });
+            $('.export_filter_btn').unbind();
+            $(".export_filter_btn").on('click', function () {
+                processBtnDisable($(this));
+                oTable.fnFilter('yes', 1, false);
             });
         });
         function saveCustomer() {
