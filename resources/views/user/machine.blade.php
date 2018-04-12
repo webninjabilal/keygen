@@ -30,6 +30,8 @@
         </tbody>
     </table>
     <div class="col-sm-12 pull-right">
-        {!! $user_machine_codes->render() !!}
+        @if(count($user_machine_codes) > 0)
+            {!! $user_machine_codes->render() !!}
+        @endif
     </div>
 </div>
