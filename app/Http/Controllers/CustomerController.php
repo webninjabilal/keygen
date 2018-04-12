@@ -234,13 +234,13 @@ class CustomerController extends Controller
         }
         $query->select(\DB::raw('customers.id as id'),'customers.name', 'machines.nick_name as machine_name', 'machine_users.credits as machine_credits');
 
-        /*if($order_col == 0) {
+        if($order_col == 0) {
             $query->orderBy('customers.name', $order_by);
         } else if($order_col == 1) {
             $query->orderBy('machines.nick_name', $order_by);
         } else if($order_col == 2) {
             $query->orderBy('machine_users.credits', $order_by);
-        }*/
+        }
 
         $query->orderBy('customers.id', 'DESC')->orderBy('machine_users.customer_id', 'DESC');
         $total_records = $query->get()->count();

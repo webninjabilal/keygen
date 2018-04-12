@@ -90,7 +90,13 @@
                 processing: true,
                 serverSide: true,
                 pageLength: 25,
-                bSort: false,
+                "order": [[ 0, "desc" ]],
+                "aoColumns": [
+                    null,
+                    { "bSortable": false },
+                    { "bSortable": false },
+                    { "bSortable": false },
+                ],
                 ajax : {
                     url: "{{ route('customer_records') }}",
                     data: function(d){
