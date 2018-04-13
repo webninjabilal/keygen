@@ -14,3 +14,8 @@
     {!! Form::label('used_date','Machine Date *') !!}
     {!! Form::text('used_date' , date('m/d/Y'), ['id' => 'used_date','class' => 'form-control date','placeholder' => date('m/d/Y'),'readonly' => 'readonly','required'=>'true']) !!}
 </div>
+
+<div class="form-group">
+    {!! Form::label('notes','Notes') !!}
+    {!! Form::textarea('notes' , null, ['id' => 'notes', 'rows' => '3', 'class' => 'form-control','placeholder' => 'Notes...']) !!}
+</div>

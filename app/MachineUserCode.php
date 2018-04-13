@@ -20,7 +20,8 @@ class MachineUserCode extends Model
         'code',
         'created_by',
         'machine_id',
-        'block_serial_number'
+        'block_serial_number',
+        'notes'
     ];
 
     public function machine_user()

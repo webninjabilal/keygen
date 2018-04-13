@@ -456,7 +456,8 @@ class UserController extends Controller
                     'code'          => $machine_code,
                     'status'        => 1,
                     'created_by'    => $this->user->id,
-                    'machine_id'    => $machine->id
+                    'machine_id'    => $machine->id,
+                    'notes'         => $request->input('notes')
                 ]);
 
                 $user_machine->credits = $user_machine->credits - $uses;
