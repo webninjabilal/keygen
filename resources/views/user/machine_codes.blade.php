@@ -48,8 +48,18 @@
 @section('footer')
 
     <script>
+        var preSelectedDate = '';
         $(document).ready(function () {
             dateGroupDiv('#machine_generate_code .date');
+            preSelectedDate = $('#machine_generate_code .date').val();
+            $('#machine_generate_code .date').change( function () {
+                var selectedDate = $(this).val();
+                if(selectedDate == '') {
+                    $(this).val(preSelectedDate);
+                } else {
+                    preSelectedDate = selectedDate;
+                }
+            });
         });
         function generateMachineCode() {
             return reloadAjaxSubmit('machine_generate_code',"{{ route('user_machine_generate_code') }}",'machine_id','Submit');

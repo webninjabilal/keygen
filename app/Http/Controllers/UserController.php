@@ -206,7 +206,11 @@ class UserController extends Controller
         $user = User::whereHas('company', function($query) {
             $query->where('company_id', $this->company->id);
         })->findOrFail($user_id);
-        $user->delete();
+        if($user) {
+            $user->email = $user->id.'-'.$user->email;
+            $user->update();
+            $user->delete();
+        }
         flash()->success('User Deleted Successfully');
         return json_encode(['success' => true]);
     }
