@@ -6,6 +6,7 @@ use App\Company;
 use App\Customer;
 use App\Http\Requests\CustomerRequest;
 use App\MachineUserCode;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -201,6 +202,14 @@ class CustomerController extends Controller
         $customer_id = $request->input('customer_id');
         $customer = $this->company->customer()->where('id', $customer_id)->first();
         if($customer) {
+            $users = $customer->user()->get();
+            if(count($users) > 0) {
+                foreach ($users as $user) {
+                    $user->email = $user->id.'-'.$user->email;
+                    $user->status = 2;
+                    $user->update();
+                }
+            }
             $customer->delete();
         }
 

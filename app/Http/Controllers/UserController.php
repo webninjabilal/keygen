@@ -208,8 +208,8 @@ class UserController extends Controller
         })->findOrFail($user_id);
         if($user) {
             $user->email = $user->id.'-'.$user->email;
+            $user->status = 2;
             $user->update();
-            $user->delete();
         }
         flash()->success('User Deleted Successfully');
         return json_encode(['success' => true]);
@@ -277,7 +277,7 @@ class UserController extends Controller
         }
 
 
-        $query->orderBy('id', 'DESC');
+        $query->active()->orderBy('id', 'DESC');
 
         $total_records = $query->count();
 
@@ -377,7 +377,7 @@ class UserController extends Controller
         }
 
 
-        $users = $query->orderBy('id', 'DESC')->get();
+        $users = $query->active()->orderBy('id', 'DESC')->get();
         if(count($users) > 0) {
             foreach ($users as $user) {
                 $data = [

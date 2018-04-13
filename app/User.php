@@ -172,4 +172,9 @@ class User extends Authenticatable
         return $listing;
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1);
+    }
+
 }
